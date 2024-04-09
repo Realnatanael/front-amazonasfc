@@ -1,18 +1,19 @@
 import logo from '../../images/AmazonasFansLogo.png'
-import "./Navbar.css"
+//import "./Navbar.css"
+import { Button, ImageLogo, Nav, InputSpace } from '../Navbar/NavbarStyled'
 
 export function Navbar(){
     return (
        <>
-            <nav>
-                <div className="input-search-space">
+            <Nav>
+                <InputSpace >
                     <i className='bi bi-search'></i>
                     <input type="text" placeholder='Pesquisar'/>
-                </div>
-                <img src={logo} alt="Logo Amazonas Posts" />
+                </InputSpace>
+                <ImageLogo src={logo} alt="Logo Amazonas Posts" />
 
-                <button>Entrar</button>
-            </nav>
+                <Button>Entrar</Button>
+            </Nav>
        </>
     )
 }
