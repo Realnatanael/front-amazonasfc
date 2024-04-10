@@ -15,6 +15,6 @@ export const GlobalStyled = createGlobalStyle`
     body{
         max-width: 100vw;
         height: 100vh;
-        background-color: #f5f5f5;
+        background-color: #171717;
     }
 `
