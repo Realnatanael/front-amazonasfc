@@ -14,16 +14,23 @@ display: flex;
 
 export const CardBody = styled.article`
     display: flex;
+    flex-direction: column;
     align-items: center; // alinha os itens no centro do eixo y (vertical) 
     justify-content: center; // alinha os itens no centro do eixo x (horizontal)
     gap: 1rem; 
+
+    div {
+        display: flex;
+        align-items: center;
+    }
     
     h2 {
         margin-bottom: 1rem;
     }
 
     img {
-      width: 30%;
+      width: 50%;
+      margin-left: 5rem;
       object-fit: cover; // a imagem cobre todo o espaço
       object-position: center; // centraliza a imagem
     }
