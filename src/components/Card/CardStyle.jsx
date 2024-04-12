@@ -6,9 +6,10 @@ display: flex;
     gap: 1rem;
     max-width: 100%;
 
-    box-shadow: rgba(50, 50, 105, 0.149) 0px 2px 5px 0px, hsla(0, 0%, 0%, 0.05) 0px 1px 1px 0px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.675);
     border-radius: 0.5rem;
-    background-color: #fff;
+    background-color: #171717;
+    color: white;
     padding: 2rem;
 `
 

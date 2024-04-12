@@ -15,11 +15,11 @@ export function Card(props){
             <CardFooter>
                 <div>
                     <i className= "bi bi-hand-thumbs-up"></i>
-                    <span>{props.likes}</span>
+                    <span>{props.likes?.length}</span>
                 </div>
                 <div> 
                     <i className= "bi bi-chat"></i>
-                    <span>{props.comments}</span>
+                    <span>{props.comments?.length}</span>
                 </div>
             </CardFooter>
         </CardContainer>

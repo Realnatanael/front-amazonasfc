@@ -1,34 +1,50 @@
 import { useState, useEffect } from "react";
 import { Card } from "../../components/Card/Card";
 import { Navbar } from "../../components/Navbar/Navbar";
-import { getAllPosts } from "../../services/postsServices";
-import { HomeBody } from "./HomeStyled";
+import { getAllPosts, getTopPosts } from "../../services/postsServices";
+import { HomeBody, HomeHeader } from "./HomeStyled";
 
 export default function Home(){
 
-    const [news, setNews] = useState([]); // This is the state that will store the news data from the API request 
+    const [posts, setPosts] = useState([]); 
+    const [topPosts, setTopPosts] = useState(null); 
 
-    async function findAllPosts(){
-        const response = await getAllPosts();
-        setNews(response.data.results);
+    async function findPost(){
+        const postsResponse = await getAllPosts();
+        setPosts(postsResponse.data.results);
+
+        const topPostResponse = await getTopPosts();
+        console.log(topPostResponse.data);
+        setTopPosts(topPostResponse.data.news);
     }
 
     useEffect(()=>{
-        findAllPosts();
+        findPost();
     }, []);
 
     return (
         <>
             <Navbar/>
+            <HomeHeader>
+                {topPosts && topPosts.title && 
+                    <Card 
+                        title={topPosts.title}
+                        text={topPosts.text}
+                        banner={topPosts.banner}
+                        likes={topPosts.likes}
+                        comments={topPosts.comments}
+                    />
+                }
+            </HomeHeader>
             <HomeBody>
-                {news.map((item, index) => {
+                {posts && posts.map((item, index) => {
                    return <Card 
                         key={item.id} 
                         title={item.title}
                         text={item.text}
                         banner={item.banner}
-                        likes={item.likes.length}
-                        comments={item.comments.length}
+                        likes={item.likes}
+                        comments={item.comments}
                     />
                 })}
             </HomeBody>
