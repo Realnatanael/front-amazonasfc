@@ -28,6 +28,7 @@ export default function Home(){
             <HomeHeader>
                 {topPosts && topPosts.title && 
                     <Card 
+                        top={true}
                         title={topPosts.title}
                         text={topPosts.text}
                         banner={topPosts.banner}

@@ -7,33 +7,42 @@ display: flex;
     max-width: 100%;
 
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.675);
-    border-radius: 0.5rem;
+    border-radius: 0.8rem;
     background-color: #171717;
     color: white;
-    padding: 2rem;
 `
 
 export const CardBody = styled.article`
     display: flex;
-    flex-direction: column;
-    align-items: center; // alinha os itens no centro do eixo y (vertical) 
-    justify-content: center; // alinha os itens no centro do eixo x (horizontal)
-    gap: 1rem; 
+    width: 100%;
+    height: 100%;
 
     div {
         display: flex;
-        align-items: center;
-    }
-    
-    h2 {
-        margin-bottom: 1rem;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 1rem;
+        width: 100%;
     }
 
     img {
       width: 50%;
-      margin-left: 5rem;
       object-fit: cover; // a imagem cobre todo o espaço
       object-position: center; // centraliza a imagem
+      border-radius: 0 0.8rem 0.8rem 0;
+    }
+`
+
+export const CardHeader = styled.article`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: ${props => props.top ? "1.5rem" : "0.9rem"};
+
+    h2{
+        margin-bottom: 1rem;
+        font-size: ${props => props.top ? "3rem" : "1.5rem"};
+        width: 100%;
     }
 `
 
@@ -42,7 +51,7 @@ export const CardFooter = styled.article`
     align-items: center;
     gap: 1rem;
 
-    div {
+    section {
         display: flex;
         align-items: center;
         gap: 0.2rem;

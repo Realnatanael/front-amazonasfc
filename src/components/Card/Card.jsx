@@ -1,27 +1,31 @@
 import { TextLimit } from "../TextLimit/TextLimit";
-import { CardBody, CardContainer, CardFooter } from "./CardStyle";
+import { CardBody, CardContainer, CardFooter, CardHeader } from "./CardStyle";
 
 export function Card(props){
     return (
         <CardContainer>
-            <CardBody>
+            <CardBody >
                 <div>
-                    <h2>{props.title}</h2>
-                    <img src={props.banner} alt="Imagem" />
+                    <CardHeader top={props.top}>
+                        <h2>{props.title}</h2>
+                        <TextLimit text= {props.text} limit={180}/>
+                    </CardHeader>
+                    
+                    <CardFooter>
+                        <section>
+                            <i className= "bi bi-hand-thumbs-up"></i>
+                            <span>{props.likes?.length}</span>
+                        </section>
+                        <section> 
+                            <i className= "bi bi-chat"></i>
+                            <span>{props.comments?.length}</span>
+                        </section>
+                    </CardFooter>
                 </div>
-                <TextLimit text= {props.text} limit={180}/>
+                <img src={props.banner} alt="Imagem" />
             </CardBody>
 
-            <CardFooter>
-                <div>
-                    <i className= "bi bi-hand-thumbs-up"></i>
-                    <span>{props.likes?.length}</span>
-                </div>
-                <div> 
-                    <i className= "bi bi-chat"></i>
-                    <span>{props.comments?.length}</span>
-                </div>
-            </CardFooter>
+            
         </CardContainer>
     )
 } 
