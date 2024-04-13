@@ -24,7 +24,6 @@ export default function Home(){
 
     return (
         <>
-            <Navbar/>
             <HomeHeader>
                 {topPosts && topPosts.title && 
                     <Card 
