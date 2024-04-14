@@ -26,15 +26,23 @@ export const InputSpace = styled.div`
     align-items: center;
     margin-left: 1rem;
 
-    i {
+    button {
         position: absolute;
         top: 1;
-        right: 0rem;
+        right: 0.1rem;
         z-index: 10;
-        background-color: #f5f5f500;
+        background-color: #0b0b0b;
         color: #757575;
+        border: none;
         border-radius: .3rem;
         padding: .5rem;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    button:hover{
+        background-color: #464545;
+        border-radius: 50%;
     }
 
     input {
