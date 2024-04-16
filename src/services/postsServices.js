@@ -22,3 +22,12 @@ export function getTopPosts() {
     });
 }
 
+export function searchPosts(title) {
+  return axios.get(`${baseURL}/news/search?title=${title}`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.error('Houve um erro ao obter os posts:', error);
+    });
+}
