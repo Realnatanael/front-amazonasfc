@@ -21,3 +21,4 @@ export function getTopPosts() {
       console.error('Houve um erro ao obter os posts:', error);
     });
 }
+
