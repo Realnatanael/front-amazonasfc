@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Card } from "../../components/Card/Card";
-import { Navbar } from "../../components/Navbar/Navbar";
 import { getAllPosts, getTopPosts } from "../../services/postsServices";
 import { HomeBody, HomeHeader } from "./HomeStyled";
 

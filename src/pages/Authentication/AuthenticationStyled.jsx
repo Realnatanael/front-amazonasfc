@@ -24,12 +24,18 @@ export const Section = styled.section`
     height: 400px;
     padding: 2rem;
     gap: 1rem;
-    background-color: ${(props)=> (props.type === "signin" ? "#fcba30" : "#f8f8f8")};
+    background-color: ${(props)=> (props.type === "signin" ? "#000000" : "#f8f8f8")};
     color: ${(props)=> (props.type === "signup" ? "#fcba30" : "#f8f8f8")};
 
     h2{
         font-size: 2rem;
         text-align: center;
         font-weight: 700;
+    }
+
+    p{
+        font-size: 1rem;
+        text-align: center;
+        font-weight: 300;
     }
 `
