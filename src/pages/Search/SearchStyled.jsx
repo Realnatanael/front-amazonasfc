@@ -21,7 +21,7 @@ export const SearchPosts = styled.div`
     
 `
 export const TextResults = styled.div`
-    padding: 4rem;
+    padding: 3rem;
     background-color: #171717;
     width: 80%;
     border-radius: 0.3rem;
