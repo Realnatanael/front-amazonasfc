@@ -11,7 +11,7 @@ export const ButtonSpace = styled.button`
     cursor: pointer;
     border-radius: 0.3rem;
     font-family: Roboto, Arial;
-    width: auto;
+    width: 100%;
     font-weight: 500;
     letter-spacing: 0.1rem;
 
