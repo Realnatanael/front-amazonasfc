@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const baseURL = 'http://localhost:3000'
 
@@ -30,4 +31,13 @@ export function searchPosts(title) {
     .catch(error => {
       console.error('Houve um erro ao obter os posts:', error);
     });
+}
+
+export function getAllPostsByUser(){
+  const response = axios.get(`${baseURL}/news/byUser`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  });
+  return response;
 }

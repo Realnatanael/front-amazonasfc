@@ -82,3 +82,20 @@ export const ProfileIconAdd = styled.div`
         box-shadow: 0 0 2rem #fcbb3080;
         font-size: 2.4rem;
     }`
+
+export const ProfilePosts = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin: 1rem auto;
+    width: 80%;
+
+    p{
+        grid-column: 1 / -1;
+        text-align: center;
+        font-size: 1.5rem;
+        color: #fcba30;
+        font-weight: bold;
+        margin-top: 1rem;
+    }
+`
