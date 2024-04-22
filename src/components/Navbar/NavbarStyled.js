@@ -10,6 +10,10 @@ export const Nav = styled.nav`
     background-color: black;
     z-index: 1;
     box-shadow: rgba(17, 17, 26, 0.1)0px 1px 0px;
+
+    p{
+        color: #fcba15;
+    }
 `;
 
 export const ImageLogo = styled.img`
@@ -68,4 +72,35 @@ export const ErrorSpan = styled.span`
     justify-content: center;
     font-size: 1.1rem;
     font-weight: bold;
+`;
+
+export const UserLoggerSpace = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    gap: 1rem;
+
+    a{
+        text-decoration: none;
+    }
+
+    h2{
+        color: #fcba15;
+        font-size: 1rem;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+
+    h2{
+        &:hover{
+            color: #ffcf4d; 
+            text-shadow: 0px 0px 30px #ffcf4d;
+        }
+    }
+
+    i{
+        color: #fcba15;
+        cursor: pointer;
+    }
 `;

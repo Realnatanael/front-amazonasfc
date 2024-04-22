@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card } from "../../components/Card/Card";
 import { getAllPosts, getTopPosts } from "../../services/postsServices";
 import { HomeBody, HomeHeader } from "./HomeStyled";
+import Cookies from 'js-cookie';
 
 export default function Home(){
 
@@ -13,7 +14,7 @@ export default function Home(){
         setPosts(postsResponse.data.results);
 
         const topPostResponse = await getTopPosts();
-        console.log(topPostResponse.data);
+        //console.log(topPostResponse.data);
         setTopPosts(topPostResponse.data.news);
     }
 
@@ -26,7 +27,7 @@ export default function Home(){
             <HomeHeader>
                 {topPosts && topPosts.title && 
                     <Card 
-                        top={true}
+                        top={true.toString()}
                         title={topPosts.title}
                         text={topPosts.text}
                         banner={topPosts.banner}

@@ -16,7 +16,7 @@ export const ButtonSpace = styled.button`
     letter-spacing: 0.1rem;
 
 &:hover{
-    background-color: #fcba30;
+    background-color: #ffb619;
     color: white;
 } 
 `;

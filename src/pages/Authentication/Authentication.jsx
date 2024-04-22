@@ -6,16 +6,40 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../../Schemas/SigninSchema";
 import { ErrorSpan } from "../../components/Navbar/NavbarStyled";
+import Cookies from "js-cookie";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+const baseURL = 'http://localhost:3000'
 
 export function Authentication(){
+    const navigate = useNavigate();
     const { 
         register: registerSignin, 
         handleSubmit: handleSubmitSignin, 
         formState: {errors: errorsSignin}, 
     } = useForm({resolver: zodResolver(signinSchema)});
 
-    function inHanleSubmit(data){
-        console.log(data)
+    async function inHanleSubmit(data){
+        try {
+            // Fazer a solicitação à sua API
+            const response = await axios.post(`${baseURL}/auth/login`, {
+                email: data.email,
+                password: data.password
+            });
+
+            // Salvar o token em um cookie
+            const token = response.data.token;
+            Cookies.set('token', token, {expires: 1});
+
+            // Dar um console.log do token
+            console.log(token);
+
+            // Navegar para a página "/"
+            navigate('/');
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return <AuthContainer>

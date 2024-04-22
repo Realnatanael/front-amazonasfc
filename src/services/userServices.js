@@ -1,4 +1,6 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const baseURL = 'http://localhost:3000';
 
@@ -14,6 +16,17 @@ export function signup(data){
       return response;  
 }
 
+export function userLogged(){
+    const decoded = jwtDecode(Cookies.get('token'));
+    const userId = decoded.id;
+
+    const response = axios.get(`${baseURL}/user/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${Cookies.get('token')}`,
+        }
+    });
+    return response;
+}
 
 function generateUsername(name){
     const nameLowerCaseWithoutSpace = name.replace(/\s/g, '').toLowerCase();

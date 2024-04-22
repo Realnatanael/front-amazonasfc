@@ -1,16 +1,22 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import logo from '../../images/AmazonasFansLogo.png'
-import {ImageLogo, Nav, InputSpace, ErrorSpan } from '../Navbar/NavbarStyled'
+import {ImageLogo, Nav, InputSpace, ErrorSpan, UserLoggerSpace } from '../Navbar/NavbarStyled'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../Button/Button';
 import { searchSchema } from '../../Schemas/SearchSchema';
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { userLogged } from '../../services/userServices'; 
+import { useState } from 'react';
+
 
 export function Navbar(){
     const {register, handleSubmit, reset, formState: {errors}} = useForm({
         resolver: zodResolver(searchSchema),
     });
     const navigate = useNavigate();
+    const [user, setUser] = useState({});
 
     function onSearch(data){
         const {title} = data;
@@ -18,9 +24,26 @@ export function Navbar(){
         reset();
     }
 
-    function goAuth(){
-        navigate('/auth');
+    async function findUserLogged(){
+        try {
+            const response = await userLogged();
+            setUser(response.data);
+        } catch (error) {
+            console.error(error);
+        }
     }
+
+    function signout(){
+        Cookies.remove('token');
+        setUser(null);
+        navigate('/');
+    }
+
+    useEffect(()=>{
+        if (Cookies.get("token")) {
+            findUserLogged();
+        }
+    }, []);
 
     return (
        <>
@@ -38,9 +61,19 @@ export function Navbar(){
                     <ImageLogo src={logo} alt="Logo Amazonas Posts" />
                 </Link>
 
-                <Link to="/auth">
-                    <Button  type="button" text="Entrar">Entrar</Button>
-                </Link>
+                {user ? (
+                    <UserLoggerSpace>
+                        <Link to="/profile">
+                        <h2>{user.name}</h2>
+                        </Link>
+                        <i className='bi bi-box-arrow-right' onClick={signout}></i>
+                    </UserLoggerSpace>
+                ): (
+                    <Link to="/auth">
+                        <Button  type="button" text="Entrar">Entrar</Button>
+                    </Link>
+                )}
+
                 
             </Nav>
             {errors.title && <ErrorSpan>{errors.title.message}</ErrorSpan>}
