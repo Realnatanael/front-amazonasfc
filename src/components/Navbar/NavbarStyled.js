@@ -61,6 +61,9 @@ export const InputSpace = styled.div`
         &:focus{
             border:2px solid #fcba1596;
         }
+        &:hover{
+            box-shadow: 0px 0px 10px #fcba1596;
+        }
     }
 `
 
