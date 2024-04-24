@@ -37,17 +37,17 @@ export default function Home(){
                 }
             </HomeHeader>
             <HomeBody>
-                {posts && posts.map((item, index) => {
-                   return <Card 
-                        key={item.id} 
-                        title={item.title}
-                        text={item.text}
-                        banner={item.banner}
-                        likes={item.likes}
-                        comments={item.comments}
-                    />
-                })}
-            </HomeBody>
+                {posts && topPosts && posts.filter(post => post.id !== topPosts.id).map((item, index) => {
+                return <Card 
+                    key={item.id} 
+                    title={item.title}
+                    text={item.text}
+                    banner={item.banner}
+                    likes={item.likes}
+                    comments={item.comments}
+                />
+            })}
+</HomeBody>
         </>
     )
 }

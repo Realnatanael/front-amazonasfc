@@ -50,3 +50,15 @@ export function createNews(data){
   });
   return response;
 }
+
+export function getNewsById(id){
+  const response = axios.get(`${baseURL}/news/${id}`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao obter a notícia:', error);
+  });
+  return response;
+}

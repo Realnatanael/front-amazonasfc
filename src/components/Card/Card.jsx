@@ -1,28 +1,32 @@
+import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader } from "./CardStyle";
 
-export function Card(props){
+export function Card({top, title, text, banner, likes, comments, actions=false, id}){
     return (
         <CardContainer>
             <CardBody >
                 <div>
-                    <CardHeader top={props.top}>
-                        <h2>{props.title}</h2>
-                        <TextLimit text= {props.text} limit={180}/>
+                    <CardHeader top={top}>
+                        {actions && (<Link to={`/manage-news/edit/${id}`}>
+                            <i className="bi bi-pencil-square"></i>
+                        </Link>)}
+                        <h2>{title}</h2>
+                        <TextLimit text= {text} limit={180}/>
                     </CardHeader>
                     
                     <CardFooter>
                         <section>
                             <i className= "bi bi-hand-thumbs-up"></i>
-                            <span>{props.likes?.length}</span>
+                            <span>{likes?.length}</span>
                         </section>
                         <section> 
                             <i className= "bi bi-chat"></i>
-                            <span>{props.comments?.length}</span>
+                            <span>{comments?.length}</span>
                         </section>
                     </CardFooter>
                 </div>
-                <img src={props.banner} alt="Imagem" />
+                <img src={banner} alt="Imagem" />
             </CardBody>
 
             

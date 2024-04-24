@@ -9,6 +9,5 @@ export const HomeBody = styled.section`
 `
 export const HomeHeader = styled.header`
     width: 80%;
-    display: flex;
     margin: 1rem auto;
 `
