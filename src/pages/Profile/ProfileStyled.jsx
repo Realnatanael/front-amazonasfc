@@ -90,7 +90,7 @@ export const ProfilePosts = styled.div`
     margin: 1rem auto;
     width: 80%;
 
-    p{
+    h3{
         grid-column: 1 / -1;
         text-align: center;
         font-size: 1.5rem;

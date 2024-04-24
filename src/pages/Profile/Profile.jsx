@@ -4,6 +4,7 @@ import { ProfileActions, ProfileAvatar, ProfileBackground, ProfileContainer, Pro
 import { getAllPostsByUser } from "../../services/postsServices";
 import { getItem } from "localforage";
 import { Card } from "../../components/Card/Card";
+import { Link } from "react-router-dom";
 
 export function Profile(){
     const [user] = useContext(UserContext);
@@ -44,13 +45,15 @@ export function Profile(){
                         <p>{user.username}</p>
                 </ProfileUser>
                 <ProfileActions>
-                    <ProfileIconAdd>
-                        <i className="bi bi-plus-circle"></i>
-                    </ProfileIconAdd>
+                    <Link to="/manage-news/add">
+                        <ProfileIconAdd>
+                            <i className="bi bi-plus-circle"></i>
+                        </ProfileIconAdd>
+                    </Link>
                 </ProfileActions>
             </ProfileHeader>
             <ProfilePosts>
-                {news.length === 0 && <p>Você não encontrou nenhum post</p>}
+                {news.length === 0 && <h3>Você não encontrou nenhum post</h3>}
 
                 {news.map(item => {
                     return (

@@ -11,6 +11,7 @@ import { Authentication } from './pages/Authentication/Authentication.jsx'
 import { Registration } from './pages/Registration/Registration.jsx'
 import { Profile } from './pages/Profile/Profile.jsx'
 import UserProvider from './Context/UserContext.jsx'
+import { ManageNews } from './pages/ManageNews/ManageNews.jsx'
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
     {
       path: "/profile",
       element: <Profile/>,
+    },
+    {
+      path: "/manage-news/:action",
+      element: <ManageNews/>,
     },
     ],
   },

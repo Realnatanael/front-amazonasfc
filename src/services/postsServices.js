@@ -41,3 +41,12 @@ export function getAllPostsByUser(){
   });
   return response;
 }
+
+export function createNews(data){
+  const response = axios.post(`${baseURL}/news/create`, data, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+  });
+  return response;
+}
