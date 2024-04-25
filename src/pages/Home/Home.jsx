@@ -46,8 +46,8 @@ export default function Home(){
                     likes={item.likes}
                     comments={item.comments}
                 />
-            })}
-</HomeBody>
+                })}
+            </HomeBody>
         </>
     )
 }

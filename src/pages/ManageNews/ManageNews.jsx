@@ -5,7 +5,7 @@ import { newsSchema } from "../../Schemas/newsSchemas";
 import { ErrorSpan } from "../../components/Navbar/NavbarStyled";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
-import { createNews, getNewsById } from "../../services/postsServices";
+import { createNews, deleteNews, getNewsById, updateNews } from "../../services/postsServices";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -30,12 +30,12 @@ export function ManageNews() {
     }
 
     async function editNewsSubmit(data){
-        //try {
-        //    await updateNews(data);
-        //    navigate("/profile");
-        //} catch (error) {
-        //    console.error(error);
-        //}
+        try {
+            await updateNews(data, id);
+            navigate("/profile");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     async function findNewsById(id){
@@ -49,25 +49,37 @@ export function ManageNews() {
         }
     }
 
+    async function deleteNewsSubmit(){
+        try {
+            await deleteNews(id);
+            navigate("/profile");
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
-        if (action === "edit") {
+        if (action === "edit" || action === "delete") {
             findNewsById(id)
         }
     }, []);
 
     return (
         <AddNewsContainer>
-            <h2>{action==="add" ? "Adicionar" : "Atualizar"}Publicação</h2>
+            <h2>{action==="add" ? "Adicionar" : action === "edit" ? "Atualizar" : "Apagar"} Publicação</h2>
             <form onSubmit={
                 action === "add" 
                 ? handleRegisterNews(registerNewsSubmit)
-                : handleRegisterNews(editNewsSubmit)
+                : action === "edit" 
+                ? handleRegisterNews(editNewsSubmit) 
+                : handleRegisterNews(deleteNewsSubmit) 
             }>
                 <Input
                     type="text"
                     placeholder="Título"
                     name="title"
                     register={registerNews}
+                    disabled={action === "delete"}
                 />
                 {errorsRegisterNews.title && (<ErrorSpan>{errorsRegisterNews.title.message}</ErrorSpan>)}
                 <Input
@@ -75,6 +87,7 @@ export function ManageNews() {
                     placeholder="URL da imagem"
                     name="banner"
                     register={registerNews}
+                    disabled={action === "delete"}
                 />
                 {errorsRegisterNews.banner && (<ErrorSpan>{errorsRegisterNews.banner.message}</ErrorSpan>)}
                 <Input
@@ -83,12 +96,13 @@ export function ManageNews() {
                     name="text"
                     register={registerNews}
                     isInput={false}
+                    disabled={action === "delete"}
                 />
                 {errorsRegisterNews.text && (<ErrorSpan>{errorsRegisterNews.text.message}</ErrorSpan>)}
 
                 <Button 
                     datatype="submit"
-                    text={action === "add" ? "Adicionar" : "Atualizar"}
+                    text={action === "add" ? "Adicionar" : action === "edit" ? "Atualizar" : "Apagar"}
                 />
             </form>
         </AddNewsContainer>

@@ -89,7 +89,10 @@ export const ProfilePosts = styled.div`
     grid-gap: 1rem;
     margin: 1rem auto;
     width: 80%;
-
+    
+    a{
+        text-decoration: none;
+    }
     h3{
         grid-column: 1 / -1;
         text-align: center;
