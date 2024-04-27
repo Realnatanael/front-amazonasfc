@@ -80,3 +80,15 @@ export function deleteNews(id){
   });
   return response;
 }
+
+export function likeNews(id){
+  const response = axios.patch(`${baseURL}/news/like/${id}`, {}, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao dar like na notícia:', error);
+  });
+  return response;
+}

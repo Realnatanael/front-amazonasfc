@@ -8,6 +8,7 @@ export default function Home(){
 
     const [posts, setPosts] = useState([]); 
     const [topPosts, setTopPosts] = useState(null); 
+    const userId = Cookies.get('userId');
 
     async function findPost(){
         const postsResponse = await getAllPosts();
@@ -27,7 +28,9 @@ export default function Home(){
             <HomeHeader>
                 {topPosts && topPosts.title && 
                     <Card 
+                        userId={userId}
                         top={true.toString()}
+                        id={topPosts.id}
                         title={topPosts.title}
                         text={topPosts.text}
                         banner={topPosts.banner}
@@ -39,7 +42,9 @@ export default function Home(){
             <HomeBody>
                 {posts && topPosts && posts.filter(post => post.id !== topPosts.id).map((item, index) => {
                 return <Card 
+                    userId={userId}
                     key={item.id} 
+                    id={item.id}
                     title={item.title}
                     text={item.text}
                     banner={item.banner}

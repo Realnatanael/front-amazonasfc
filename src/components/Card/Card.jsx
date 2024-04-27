@@ -1,8 +1,29 @@
 import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader } from "./CardStyle";
+import { likeNews } from "../../services/postsServices";
+import { useState } from "react";
 
 export function Card({top, title, text, banner, likes, comments, actions=false, id}){
+
+    const [likeCount, setLikeCount] = useState(likes?.length || 0);
+    const [liked, setLiked] = useState(false);
+
+const handleLike = async () => {
+    try {
+        const response = await likeNews(id);
+
+        if (response && response.status === 200) {
+            setLiked(response.data.liked);
+            setLikeCount(response.data.liked ? likeCount + 1 : likeCount - 1);
+        } else {
+            console.log('Erro ao registrar like');
+        }
+    } catch (error) {
+        console.error('Erro ao registrar like:', error);
+    }
+};
+
     return (
         <CardContainer>
             <CardBody >
@@ -24,11 +45,11 @@ export function Card({top, title, text, banner, likes, comments, actions=false, 
                     
                     <CardFooter>
                         <section>
-                            <i className= "bi bi-hand-thumbs-up"></i>
-                            <span>{likes?.length}</span>
+                            <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
+                            <span>{likeCount}</span>
                         </section>
                         <section> 
-                            <i className= "bi bi-chat"></i>
+                            <i className="bi bi-chat"></i>
                             <span>{comments?.length}</span>
                         </section>
                     </CardFooter>
