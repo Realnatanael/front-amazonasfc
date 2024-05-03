@@ -2,22 +2,12 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../Context/UserContext"
 import { ProfileActions, ProfileAvatar, ProfileBackground, ProfileContainer, ProfileHeader, ProfileIconAdd, ProfileIconEdit, ProfileUser, ProfilePosts } from "./ProfileStyled";
 import { getAllPostsByUser } from "../../services/postsServices";
-import { getItem } from "localforage";
 import { Card } from "../../components/Card/Card";
 import { Link } from "react-router-dom";
 
 export function Profile(){
     const [user] = useContext(UserContext);
     const [news, setNews] = useState([]);
-
-    async function findAllPostsByUser(){
-        const postsResponse = await getAllPostsByUser();
-        if (postsResponse.data.byUser) {
-            setNews(postsResponse.data.byUser);
-        } else {
-            console.error('postsByUser not found in response:', postsResponse);
-        }
-    }
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -66,6 +56,7 @@ export function Profile(){
                         likes= {item.likes}
                         comments= {item.comments}
                         actions= {true}
+                        userId= {user.id}
                         />
                     )
                 })}
