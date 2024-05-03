@@ -1,15 +1,16 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader } from "./CardStyle";
-import { likeNews } from "../../services/postsServices";
-import { useState } from "react";
+import { likeNews, addComment } from "../../services/postsServices";
 
 export function Card({top, title, text, banner, likes, comments, actions=false, id}){
 
     const [likeCount, setLikeCount] = useState(likes?.length || 0);
     const [liked, setLiked] = useState(false);
+    const [comment, setComment] = useState('');
 
-const handleLike = async () => {
+    const handleLike = async () => {
     try {
         const response = await likeNews(id);
 
@@ -23,41 +24,56 @@ const handleLike = async () => {
         console.error('Erro ao registrar like:', error);
     }
 };
+const handleComment = async () => {
+    try {
+        const response = await addComment(id, comment);
 
-    return (
-        <CardContainer>
-            <CardBody >
-                <div>
-                    <CardHeader top={top}>
-                        {actions && (
+        if (response && response.status === 200) {
+            // atualize a lista de comentários
+        } else {
+            console.log('Erro ao adicionar comentário');
+        }
+    } catch (error) {
+        console.error('Erro ao adicionar comentário:', error);
+    }
+};
+
+return (
+    <CardContainer>
+        <CardBody >
+            <div>
+                <CardHeader top={top}>
+                    {actions && (
                             <span>
-                                <Link to={`/manage-news/edit/${id}`}>
-                                     <i className="bi bi-pencil-square"></i>
-                                </Link>
-                                <Link to={`/manage-news/delete/${id}`}>
-                                    <i className="bi bi-trash3"></i>
-                                </Link>
-                            </span>
-                        )}
-                        <h2>{title}</h2>
-                        <TextLimit text= {text} limit={180}/>
-                    </CardHeader>
-                    
-                    <CardFooter>
-                        <section>
-                            <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
-                            <span>{likeCount}</span>
-                        </section>
-                        <section> 
-                            <i className="bi bi-chat"></i>
-                            <span>{comments?.length}</span>
-                        </section>
-                    </CardFooter>
-                </div>
-                <img src={banner} alt="Imagem" />
+                            <Link to={`/manage-news/edit/${id}`}>
+                                 <i className="bi bi-pencil-square"></i>
+                            </Link>
+                            <Link to={`/manage-news/delete/${id}`}>
+                                <i className="bi bi-trash3"></i>
+                            </Link>
+                        </span>
+                    )}
+                    <h2>{title}</h2>
+                    <TextLimit text= {text} limit={180}/>
+                </CardHeader>
+                
+                <CardFooter>
+                    <section>
+                        <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
+                        <span>{likeCount}</span>
+                    </section>
+                    <section> 
+                        <i className="bi bi-chat"></i>
+                        <span>{comments?.length}</span>
+                    </section>
+                </CardFooter>
+                <form onSubmit={handleComment}>
+                    <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
+                    <button type="submit">Comentar</button>
+                </form>
+            </div>
+            <img src={banner} alt="Imagem" />
             </CardBody>
-
-            
         </CardContainer>
     )
-} 
+}

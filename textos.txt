@@ -1,0 +1,748 @@
+eu gostaria que você me ajudasse com os comentários, eu só criei um icone, mas eu quero que meu usuario logado ao clicar no ícone ele possa publicar um comentário e aparecer logo abaixo da publicação, eu vou lhe mandar os arquivos para que você possa me ajudar, se estiver faltando algum código ou arquivo pode me pedir:
+Profile:
+import { useContext, useEffect, useState } from "react"
+import { UserContext } from "../../Context/UserContext"
+import { ProfileActions, ProfileAvatar, ProfileBackground, ProfileContainer, ProfileHeader, ProfileIconAdd, ProfileIconEdit, ProfileUser, ProfilePosts } from "./ProfileStyled";
+import { getAllPostsByUser } from "../../services/postsServices";
+import { Card } from "../../components/Card/Card";
+import { Link } from "react-router-dom";
+
+export function Profile(){
+    const [user] = useContext(UserContext);
+    const [news, setNews] = useState([]);
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const response = await getAllPostsByUser();
+                setNews(response.data.results);
+            } catch (error) {
+                console.error('Erro ao buscar notícias:', error);
+            }
+        };
+    
+        fetchNews();
+    }, []);
+
+    return (
+        <ProfileContainer>
+            <ProfileHeader>
+                <ProfileIconEdit>
+                    <i className="bi bi-pencil-square"></i>
+                </ProfileIconEdit>
+                <ProfileBackground src={user.background} alt=""/>
+                <ProfileUser>
+                    <ProfileAvatar src={user.avatar} alt="Foto de usuário"/>
+                        <h2>{user.name}</h2>
+                        <p>{user.username}</p>
+                </ProfileUser>
+                <ProfileActions>
+                    <Link to="/manage-news/add/news">
+                        <ProfileIconAdd>
+                            <i className="bi bi-plus-circle"></i>
+                        </ProfileIconAdd>
+                    </Link>
+                </ProfileActions>
+            </ProfileHeader>
+            <ProfilePosts>
+                {news.length === 0 && <h3>Você não encontrou nenhum post</h3>}
+
+                {news.map(item => {
+                    return (
+                        <Card
+                        key= {item.id}
+                        id={item.id}
+                        title= {item.title}
+                        text= {item.text}
+                        banner= {item.banner}
+                        likes= {item.likes}
+                        comments= {item.comments}
+                        actions= {true}
+                        userId= {user.id}
+                        />
+                    )
+                })}
+            </ProfilePosts>
+        </ProfileContainer>
+    )
+}
+
+postsservices: 
+import axios from 'axios'
+import Cookies from 'js-cookie'
+
+const baseURL = 'http://localhost:3000'
+
+export function getAllPosts() {
+  return axios.get(`${baseURL}/news`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.error('Houve um erro ao obter os posts:', error);
+    });
+}
+
+export function getTopPosts() {
+  return axios.get(`${baseURL}/news/top`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.error('Houve um erro ao obter os posts:', error);
+    });
+}
+
+export function searchPosts(title) {
+  return axios.get(`${baseURL}/news/search?title=${title}`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.error('Houve um erro ao obter os posts:', error);
+    });
+}
+
+export function getAllPostsByUser(){
+  const response = axios.get(`${baseURL}/news/byUser`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  });
+  return response;
+}
+
+export function createNews(data){
+  const response = axios.post(`${baseURL}/news/create`, data, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+  });
+  return response;
+}
+
+export function getNewsById(id){
+  const response = axios.get(`${baseURL}/news/${id}`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao obter a notícia:', error);
+  });
+  return response;
+}
+
+export function updateNews(body, id){
+  const response = axios.patch(`${baseURL}/news/${id}`, body, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      } 
+  });
+  return response;
+}
+
+export function deleteNews(id){
+  const response = axios.delete(`${baseURL}/news/${id}`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  });
+  return response;
+}
+
+export function likeNews(id){
+  const response = axios.patch(`${baseURL}/news/like/${id}`, {}, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao dar like na notícia:', error);
+  });
+  return response;
+}
+search:
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { searchPosts } from "../../services/postsServices";
+import { ContainerResults, SearchPosts, TextResults } from "./SearchStyled";
+import { Card } from "../../components/Card/Card";
+
+export function Search() {
+    const { title } = useParams();
+    const [posts, setPosts] = useState([]);
+
+    async function search(){
+        try {
+            const postsApi = await searchPosts(title);
+            if (postsApi.data.results) {
+                setPosts(postsApi.data.results);
+            } else {
+                setPosts([]);
+            }
+        } catch (error) {
+            console.error(error);
+            setPosts([]);
+        }
+    }
+
+    useEffect(() => {
+        search();
+    }, [title]);
+
+    return (
+        <ContainerResults>
+            <TextResults>
+                <span>
+                    {posts.length !== 0 ? `Encontramos ${posts.length} ${posts.length > 1 ? 'resultados' : 'resultado'} para:` : "Não encontramos resultados para:"}
+                </span>
+                <h2>{title}</h2>
+            </TextResults>
+
+            <SearchPosts>
+                {posts.map((item) => (
+                    <Card
+                        key={item.id}
+                        title={item.title}
+                        text={item.text}
+                        banner={item.banner}
+                        likes={item.likes}
+                        comments={item.comments}
+                    />
+                ))}
+            </SearchPosts>
+        </ContainerResults>
+    )
+}
+import { useState, useEffect } from "react";
+import { Card } from "../../components/Card/Card";
+import { getAllPosts, getTopPosts } from "../../services/postsServices";
+import { HomeBody, HomeHeader } from "./HomeStyled";
+import Cookies from 'js-cookie';
+
+export default function Home(){
+
+    const [posts, setPosts] = useState([]); 
+    const [topPosts, setTopPosts] = useState(null); 
+    const userId = Cookies.get('userId');
+
+    async function findPost(){
+        const postsResponse = await getAllPosts();
+        setPosts(postsResponse.data.results);
+
+        const topPostResponse = await getTopPosts();
+        //console.log(topPostResponse.data);
+        setTopPosts(topPostResponse.data.news);
+    }
+
+    useEffect(()=>{
+        findPost();
+    }, []);
+
+    return (
+        <>
+            <HomeHeader>
+                {topPosts && topPosts.title && 
+                    <Card 
+                        userId={userId}
+                        top={true.toString()}
+                        id={topPosts.id}
+                        title={topPosts.title}
+                        text={topPosts.text}
+                        banner={topPosts.banner}
+                        likes={topPosts.likes}
+                        comments={topPosts.comments}
+                    />
+                }
+            </HomeHeader>
+            <HomeBody>
+                {posts && topPosts && posts.filter(post => post.id !== topPosts.id).map((item, index) => {
+                return <Card 
+                    userId={userId}
+                    key={item.id} 
+                    id={item.id}
+                    title={item.title}
+                    text={item.text}
+                    banner={item.banner}
+                    likes={item.likes}
+                    comments={item.comments}
+                />
+                })}
+            </HomeBody>
+        </>
+    )
+}
+Card: 
+import { Link } from "react-router-dom";
+import { TextLimit } from "../TextLimit/TextLimit";
+import { CardBody, CardContainer, CardFooter, CardHeader } from "./CardStyle";
+import { likeNews } from "../../services/postsServices";
+import { useState } from "react";
+
+export function Card({top, title, text, banner, likes, comments, actions=false, id}){
+
+    const [likeCount, setLikeCount] = useState(likes?.length || 0);
+    const [liked, setLiked] = useState(false);
+
+const handleLike = async () => {
+    try {
+        const response = await likeNews(id);
+
+        if (response && response.status === 200) {
+            setLiked(response.data.liked);
+            setLikeCount(response.data.liked ? likeCount + 1 : likeCount - 1);
+        } else {
+            console.log('Erro ao registrar like');
+        }
+    } catch (error) {
+        console.error('Erro ao registrar like:', error);
+    }
+};
+
+    return (
+        <CardContainer>
+            <CardBody >
+                <div>
+                    <CardHeader top={top}>
+                        {actions && (
+                            <span>
+                                <Link to={`/manage-news/edit/${id}`}>
+                                     <i className="bi bi-pencil-square"></i>
+                                </Link>
+                                <Link to={`/manage-news/delete/${id}`}>
+                                    <i className="bi bi-trash3"></i>
+                                </Link>
+                            </span>
+                        )}
+                        <h2>{title}</h2>
+                        <TextLimit text= {text} limit={180}/>
+                    </CardHeader>
+                    
+                    <CardFooter>
+                        <section>
+                            <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
+                            <span>{likeCount}</span>
+                        </section>
+                        <section> 
+                            <i className="bi bi-chat"></i>
+                            <span>{comments?.length}</span>
+                        </section>
+                    </CardFooter>
+                </div>
+                <img src={banner} alt="Imagem" />
+            </CardBody>
+
+            
+        </CardContainer>
+    )
+} 
+
+aqui está meu backend(API)
+import {Router} from "express";
+const router = Router();
+import {
+    create, 
+    findAll, 
+    topNews, 
+    findById, 
+    searchByTitle, 
+    byUser, 
+    update, 
+    erase, 
+    likeNews, 
+    addComment,
+    deleteComment,
+ } from "../controllers/news.controller.js";
+import { authMiddleware } from "../middllewares/auth.middlewares.js";
+
+router.post("/create", authMiddleware, create)
+router.get("/", findAll)
+router.get("/top", topNews)
+router.get("/search", searchByTitle)
+router.get("/byUser", authMiddleware, byUser)
+router.get("/:id", authMiddleware, findById)
+router.patch("/:id", authMiddleware, update)
+router.delete("/:id", authMiddleware, erase);
+router.patch("/like/:id", authMiddleware, likeNews);
+router.patch("/comment/:id", authMiddleware, addComment);
+router.patch("/comment/:idNews/:idComment", authMiddleware, deleteComment);
+
+export default router;
+
+import {
+    createService, 
+    findAllService, 
+    countNews, 
+    topNewsService, 
+    findByIdService, 
+    searchByTitleService, 
+    byUserService, 
+    updateService, 
+    eraseService, 
+    likeNewsService, 
+    deleteLikeNewsService, 
+    addCommentService,
+    deleteCommentService
+} from "../services/news.services.js"
+
+export const create = async (req, res) => {
+    try {
+        const {title, text, banner} = req.body;
+
+        if(!title || !banner || !text){
+            res.status(400).send({
+                message: "Submit all fields for registration",
+            });
+        }
+
+        await createService({
+            title,
+            text,
+            banner,
+            user: req.userId,
+        });
+
+        res.sendStatus(201);
+    } catch (err) {
+        res.status(500).send({ message: err.message});
+    }
+};
+
+export const findAll = async (req, res) => {
+    try {
+    let {limit, offset} = req.query;
+
+    limit = Number(limit);
+    offset = Number(offset);
+
+    if(!limit) {
+        limit = 5;
+    }
+
+    if (!offset) {
+        offset = 0;
+    }
+
+    const news = await findAllService(offset, limit);
+    const total = await countNews();
+    const currentUrl = req.baseUrl;
+
+    const next = offset + limit;
+    const nextUrl = next < total ? `$(currentUrl)?limit=$(limit)&offset=$(next)`: null;
+
+    const previous = offset - limit < 0 ? null : offset - limit;
+    const previousUrl = previous != null ? `$(currentUrl)?limit=$(limit)&offset=$(previous)`: null;
+
+    if (news.length === 0){
+        return res.status(400).send({
+            message: "There are no registered news",
+        });
+    }
+    res.send({
+        nextUrl,
+        previousUrl,
+        limit,
+        offset,
+        total,
+
+        results: news.map(item => ({
+            id: item._id,
+            title: item.title,
+            text: item.text,
+            banner: item.banner,
+            likes: item.likes,
+            comments: item.comments,
+            name: item.user.name,
+            username: item.user.username,
+            userAvatar: item.user.avatar, 
+        }))
+    });} catch (err) {
+        res.status(500).send({message: err.message});
+    }
+};
+
+export const topNews = async (req, res) => {
+    try{
+    const news = await topNewsService();
+
+    if (!news){
+        return res.status(400).send({ message: "There is no registered post"});
+    }
+
+    res.send({
+       news: {
+        id: news._id,
+        title: news.title,
+        text: news.text,
+        banner: news.banner,
+        likes: news.likes,
+        comments: news.comments,
+        name: news.user.name,
+        username: news.user.username,
+        userAvatar: news.user.avatar, 
+       },
+    })} catch (err) {
+        res.status(500).send({message: err.message});
+    }
+}
+
+export const findById = async(req, res) => {
+    try{
+        const {id} = req.params;
+        const userId = req.userId;
+
+        const news = await findByIdService(id);
+
+        if (!news) {
+            return res.status(404).send({message: "News not found"});
+        }
+
+        const liked = news.likes.includes(userId);
+
+        return res.send({
+            news: {
+                id: news._id,
+                title: news.title,
+                text: news.text,
+                banner: news.banner,
+                likes: news.likes,
+                comments: news.comments,
+                name: news.user.name,
+                username: news.user.username,
+                userAvatar: news.user.avatar, 
+                liked: liked,
+            },
+        });
+    } catch (err){
+        res.status(500).send({message: err.message});
+    }
+}
+
+export const searchByTitle = async (req, res) => {
+    try{
+        const {title} = req.query;
+
+        const news =await searchByTitleService(title);
+
+        if(news.length === 0){
+            return res.status(400).send({message: "There are no posts with this title"});
+        }
+
+        return res.send({
+            results: news.map((item) => ({
+                id: item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                comments: item.comments,
+                name: item.user.name,
+                username: item.user.username,
+                userAvatar: item.user.avatar, 
+               })),
+        });
+    } catch (err){
+        res.status(500).send({message: err.message});
+    }
+}
+
+export const byUser = async (req,res) => {
+    try{
+        const id = req.userId;
+        const news = await byUserService(id);
+
+        return res.send({
+            results: news.map((item) => ({
+                id: item._id,
+                title: item.title,
+                text: item.text,
+                banner: item.banner,
+                likes: item.likes,
+                comments: item.comments,
+                name: item.user.name,
+                username: item.user.username,
+                userAvatar: item.user.avatar, 
+               })),
+        });
+    } catch (err){
+        res.status(500).send({message: err.message});
+    }
+}
+
+export const update = async(req, res) => {
+    try {
+        const {title, text, banner} = req.body;
+        const {id} = req.params;
+
+        if (!title && !banner && !text) {
+            res.status(400).send({
+                message: "Submit at least one field to update the post",
+            })
+        }
+
+        const news = await findByIdService(id);
+
+        if(news.user._id != req.userId){ //lembrando que um é objeto e o outro é string por isso não uso !==
+            return res.status(400).send({
+                message: "You didn't update this post"
+            })
+        }
+
+        await updateService(id, title, text, banner);
+
+        return res.send({message: "Post successfully updated!"})
+    } catch (err){
+        res.status(500).send({message:err.message});
+    }
+}
+
+export const erase = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const news = await findByIdService(id);
+
+        if(String(news.user._id) !== req.userId){ 
+            return res.status(400).send({
+                message: "You didn't delete this post"
+            })
+        }
+
+        await eraseService(id);
+
+        return res.send({message: "Post deleted seccessfully!"});
+    }catch (err){
+        res.status(500).send({message:err.message});
+    }
+}
+
+export const likeNews = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const userId = req.userId;
+
+        const newsLiked = await likeNewsService(id, userId);
+        if(!newsLiked){
+            await deleteLikeNewsService(id, userId);
+            return res.status(200).send({message: "Like successfully removed", liked: false});
+        }
+
+        res.send({message: "Like done successfully", liked: true});
+    } catch (err) {
+        res.status(500).send({message:err.message});  
+    }
+}
+
+export const addComment = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const userId = req.userId;
+        const {comment} = req.body;
+
+        if(!comment){
+            return res.status(400).send({message: "Write a message to comment"})
+        }
+
+        await addCommentService(id, comment, userId);
+
+        res.send({message: "Comment successfully completed"});
+    }catch (err){ res.status(500).send({message: err.message})}
+}
+
+export const deleteComment = async (req, res) => {
+    try{
+        const {idNews, idComment} = req.params;
+        const userId = req.userId;
+
+        const commentDeleted = await deleteCommentService(idNews, idComment, userId);
+
+       const commentFinder = commentDeleted.comments.find((comment) => comment.idComment === idComment)
+
+       if(!commentFinder){
+        return res.status(404).send({message:"Comment not found"})
+    }
+
+        if(commentFinder.userId !== userId){
+            return res.status(400).send({message:"You can't delete this comment"})
+        }
+
+        res.send({message: "Comment successfully removed"});
+    }catch (err){
+        res.status(500).send({message:err.message})
+    }
+}
+import mongoose from  "mongoose";
+
+const NewsSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        require: true,
+    },
+    text: {
+        type: String,
+        require: true,
+    },
+    banner: {
+        type: String,
+        require: true,
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now(),
+    },
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    likes:{
+        type: Array,
+        require: true,
+    },
+    comments:{
+        type: Array,
+        require: true,
+    }
+});
+
+const News = mongoose.model("News", NewsSchema);
+
+export default News;
+export const findAllService = (offset, limit) => News.find().sort({_id: -1}).skip(offset).limit(limit).populate("user");
+
+export const countNews = () => News.countDocuments();
+
+export const topNewsService = () => News.findOne().sort({_id: -1}).populate("user");
+
+export const findByIdService = (id) => News.findById(id).populate("user");
+
+export const searchByTitleService = (title) => News.find({
+    title: {$regex: `${title || ""}`, $options: "i"}
+}).sort({_id: -1}).populate("user");
+
+export const byUserService = (id) => News.find({user: id}).sort({_id: -1}).populate("user");
+
+export const updateService = (id, title, text, banner) => News.findOneAndUpdate({_id: id}, {title, text, banner}, {rawResult: true,});
+
+export const eraseService = (id) => News.findByIdAndDelete({_id: id});
+
+export const likeNewsService = (idNews, userId) => News.findOneAndUpdate(
+    {_id: idNews, "likes.userId": {$nin: [userId]}}, 
+    {$push: {likes: {userId, created: new Date()}}}
+);
+
+export const deleteLikeNewsService = (idNews, userId) => News.findOneAndUpdate(
+    {_id: idNews}, {$pull: {likes: {userId}}}
+);
+
+export const addCommentService = (idNews, comment, userId) => {
+    const idComment = Math.floor(Date.now() * Math.random()).toString(36);
+
+    return News.findOneAndUpdate({_id: idNews},
+        {$push: {comments: {idComment, userId, comment, ceatedAt: new Date()},
+        },
+    });
+}
+ 
+export const deleteCommentService = (idNews, idComment, userId) => News.findOneAndUpdate({_id: idNews}, {$pull: {comments: {idComment, userId}}})

@@ -92,3 +92,16 @@ export function likeNews(id){
   });
   return response;
 }
+
+
+export function addComment(id, comment){
+  const response = axios.post(`${baseURL}/news/comment/${id}`, { comment }, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao adicionar o comentário:', error);
+  });
+  return response;
+}
