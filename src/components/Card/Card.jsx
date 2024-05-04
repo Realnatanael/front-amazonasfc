@@ -35,7 +35,7 @@ export function Card({top, title, text, banner, likes, comments: initialComments
             }
         });
         setColorMap(newColorMap);
-    }, [comments, colorMap]);
+    }, [comments]);
 
     const handleLike = async () => {
     try {
@@ -51,12 +51,17 @@ export function Card({top, title, text, banner, likes, comments: initialComments
         console.error('Erro ao registrar like:', error);
     }
 };
-const handleComment = async () => {
+
+const handleComment = async (event) => {
+    event.preventDefault();
     try {
         const response = await addComment(id, comment);
 
         if (response && response.status === 200) {
-            // atualize a lista de comentários
+            // Atualize a lista de comentários no estado do componente
+            console.log(response.data);
+            setComments(prevComments => [...prevComments, response.data.comment]);
+            setComment(''); // Limpe o campo de comentário
         } else {
             console.log('Erro ao adicionar comentário');
         }
@@ -65,12 +70,14 @@ const handleComment = async () => {
     }
 };
 
-const handleDeleteComment = async (idComment) => {
+const handleDeleteComment = async (idComment, event) => {
+    event.preventDefault();
     try {
         const response = await deleteComment(id, idComment);
 
         if (response && response.status === 200) {
-            setComments(comments.filter(comment => comment.idComment !== idComment)); // Use comment.idComment aqui
+            // Atualize a lista de comentários no estado do componente
+            setComments(comments => comments.filter(comment => comment.idComment !== idComment));
         } else {
             console.log('Erro ao deletar comentário');
         }
@@ -133,8 +140,7 @@ return (
                                 <p>
                                 <span style={{color: color}}>{comment.username}</span>: {comment.comment}
                                 {Cookies.get('token') && (
-                                    <i className="bi bi-trash3" onClick={() => handleDeleteComment(comment.idComment)}></i> // Use comment.idComment aqui
-                                )}
+                                    <i className="bi bi-trash3" onClick={(event) => handleDeleteComment(comment.idComment, event)}></i>)}
                                 </p>
                                 <p className="data">Em:
                                     {new Date(comment.createdAt).toLocaleDateString()} - {new Date(comment.createdAt).toLocaleTimeString()}
@@ -143,10 +149,10 @@ return (
                         );
                     })}
                     {Cookies.get('token') && showCommentForm && (
-                        <CommentForm onSubmit={handleComment}>
-                            <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
-                            <button type="submit">Comentar</button>
-                        </CommentForm>
+                    <CommentForm onSubmit={(event) => handleComment(event)}>
+                        <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
+                        <button type="submit">Comentar</button>
+                    </CommentForm>
                     )}
                 </Commentdiv>
             )}
