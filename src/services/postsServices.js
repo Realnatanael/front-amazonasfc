@@ -105,3 +105,15 @@ export function addComment(id, comment){
   });
   return response;
 }
+
+export function deleteComment(idNews, idComment){
+  const response = axios.delete(`${baseURL}/news/comment/${idNews}/${idComment}`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao deletar o comentário:', error);
+  });
+  return response;
+}

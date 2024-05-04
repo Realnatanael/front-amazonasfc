@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader, CommentForm, Commentdiv } from "./CardStyle";
-import { likeNews, addComment } from "../../services/postsServices";
+import { likeNews, addComment, deleteComment } from "../../services/postsServices"; 
 import Cookies from 'js-cookie';
 import { ErrorSpan } from "../Navbar/NavbarStyled";
+
 
 function getRandomColor() {
     const letters = '0123456789ABCDEF';
@@ -15,7 +16,7 @@ function getRandomColor() {
     return color;
 }
 
-export function Card({top, title, text, banner, likes, comments, actions=false, id}){
+export function Card({top, title, text, banner, likes, comments: initialComments, actions=false, id}){
 
     const [likeCount, setLikeCount] = useState(likes?.length || 0);
     const [liked, setLiked] = useState(false);
@@ -24,6 +25,7 @@ export function Card({top, title, text, banner, likes, comments, actions=false, 
     const [showComments, setShowComments] = useState(false);
     const [showError, setShowError] = useState(false);
     const [colorMap, setColorMap] = useState({});
+    const [comments, setComments] = useState(initialComments);
 
     useEffect(() => {
         const newColorMap = {...colorMap};
@@ -60,6 +62,20 @@ const handleComment = async () => {
         }
     } catch (error) {
         console.error('Erro ao adicionar comentário:', error);
+    }
+};
+
+const handleDeleteComment = async (idComment) => {
+    try {
+        const response = await deleteComment(id, idComment);
+
+        if (response && response.status === 200) {
+            setComments(comments.filter(comment => comment.idComment !== idComment)); // Use comment.idComment aqui
+        } else {
+            console.log('Erro ao deletar comentário');
+        }
+    } catch (error) {
+        console.error('Erro ao deletar comentário:', error);
     }
 };
 
@@ -109,28 +125,31 @@ return (
         </CardBody>
         {showError && <ErrorSpan>Faça login para comentar</ErrorSpan>}
         {showComments && (
-            <Commentdiv>
-               {comments?.map((comment, index) => {
-                    const color = colorMap[comment.username];
-                    return (
-                        <div key={index}>
-                            <p>
-                            <span style={{color: color}}>{comment.username}</span>: {comment.comment}
-                            </p>
-                            <p className="data">Em:
-                                {new Date(comment.createdAt).toLocaleDateString()} - {new Date(comment.createdAt).toLocaleTimeString()}
-                            </p>
-                        </div>
-                    );
-                })}
-                {Cookies.get('token') && showCommentForm && (
-                    <CommentForm onSubmit={handleComment}>
-                        <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
-                        <button type="submit">Comentar</button>
-                    </CommentForm>
-                )}
-            </Commentdiv>
-        )}
-    </CardContainer>
+                <Commentdiv>
+                   {comments?.map((comment, index) => {
+                        const color = colorMap[comment.username];
+                        return (
+                            <div key={index}>
+                                <p>
+                                <span style={{color: color}}>{comment.username}</span>: {comment.comment}
+                                {Cookies.get('token') && (
+                                    <i className="bi bi-trash3" onClick={() => handleDeleteComment(comment.idComment)}></i> // Use comment.idComment aqui
+                                )}
+                                </p>
+                                <p className="data">Em:
+                                    {new Date(comment.createdAt).toLocaleDateString()} - {new Date(comment.createdAt).toLocaleTimeString()}
+                                </p>
+                            </div>
+                        );
+                    })}
+                    {Cookies.get('token') && showCommentForm && (
+                        <CommentForm onSubmit={handleComment}>
+                            <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
+                            <button type="submit">Comentar</button>
+                        </CommentForm>
+                    )}
+                </Commentdiv>
+            )}
+        </CardContainer>
 );
 }
