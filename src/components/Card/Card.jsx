@@ -70,21 +70,15 @@ const handleComment = async (event) => {
     }
 };
 
-const handleDeleteComment = async (idComment, event) => {
-    event.preventDefault();
+async function handleDeleteComment(comment) {
     try {
-        const response = await deleteComment(id, idComment);
-
-        if (response && response.status === 200) {
-            // Atualize a lista de comentários no estado do componente
-            setComments(comments => comments.filter(comment => comment.idComment !== idComment));
-        } else {
-            console.log('Erro ao deletar comentário');
-        }
+      await deleteComment(id, comment.idComment);
+      // Atualize a lista de comentários
+      setComments(comments => comments.filter(c => c.idComment !== comment.idComment));
     } catch (error) {
-        console.error('Erro ao deletar comentário:', error);
+      console.error('Erro ao deletar comentário', error);
     }
-};
+}
 
  const toggleCommentForm = () => {
     setShowComments(!showComments);
@@ -140,7 +134,7 @@ return (
                                 <p>
                                 <span style={{color: color}}>{comment.username}</span>: {comment.comment}
                                 {Cookies.get('token') && (
-                                    <i className="bi bi-trash3" onClick={(event) => handleDeleteComment(comment.idComment, event)}></i>)}
+                                    <i className="bi bi-trash3" onClick={() => handleDeleteComment(comment)}></i>)}
                                 </p>
                                 <p className="data">Em:
                                     {new Date(comment.createdAt).toLocaleDateString()} - {new Date(comment.createdAt).toLocaleTimeString()}
