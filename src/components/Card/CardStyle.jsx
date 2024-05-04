@@ -74,12 +74,6 @@ export const CardFooter = styled.article`
 `
 
 export const CommentForm = styled.form`
-    display: flex;
-    flex-direction: column;
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: #282828;
-    border-radius: 0.8rem;
 
     input {
         margin-bottom: 0.5rem;

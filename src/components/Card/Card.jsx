@@ -4,6 +4,8 @@ import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader, CommentForm } from "./CardStyle";
 import { likeNews, addComment } from "../../services/postsServices";
 import Cookies from 'js-cookie';
+import { ErrorSpan } from "../Navbar/NavbarStyled";
+import { set } from "react-hook-form";
 
 export function Card({top, title, text, banner, likes, comments, actions=false, id}){
 
@@ -12,6 +14,7 @@ export function Card({top, title, text, banner, likes, comments, actions=false, 
     const [comment, setComment] = useState('');
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [showComments, setShowComments] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     const handleLike = async () => {
     try {
@@ -45,8 +48,9 @@ const handleComment = async () => {
     setShowComments(!showComments);
     if (Cookies.get('token')) {
         setShowCommentForm(!showCommentForm);
+        setShowError(false);
     } else {
-        alert('Você precisa estar logado para comentar.');
+        setShowError(true);
     }
 };
 
@@ -79,6 +83,7 @@ return (
                         <span>{comments?.length}</span>
                     </section>
                 </CardFooter>
+                {showError && <ErrorSpan>Faça login para comentar</ErrorSpan>}
                 {showComments && (
                     <div>
                         {comments?.map((comment, index) => (
@@ -92,7 +97,7 @@ return (
                         )}
                     </div>
                 )}
-                            </div>
+            </div>
             <img src={banner} alt="Imagem" />
         </CardBody>
     </CardContainer>
