@@ -57,7 +57,7 @@ const handleComment = async () => {
 return (
     <CardContainer>
         <CardBody >
-            <div>
+            <div className="content">
                 <CardHeader top={top}>
                     {actions && (
                         <span>
@@ -83,23 +83,25 @@ return (
                         <span>{comments?.length}</span>
                     </section>
                 </CardFooter>
-                {showError && <ErrorSpan>Faça login para comentar</ErrorSpan>}
-                {showComments && (
-                    <div>
-                        {comments?.map((comment, index) => (
-                            <p key={index}>{comment.comment}</p>
-                        ))}
-                        {Cookies.get('token') && showCommentForm && (
-                            <CommentForm onSubmit={handleComment}>
-                                <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
-                                <button type="submit">Comentar</button>
-                            </CommentForm>
-                        )}
-                    </div>
+            </div>
+            <div className="image-container">
+                <img src={banner} alt="Imagem" />
+            </div>
+        </CardBody>
+        {showError && <ErrorSpan>Faça login para comentar</ErrorSpan>}
+        {showComments && (
+            <div>
+                {comments?.map((comment, index) => (
+                    <p key={index}>{comment.username}:{comment.comment}</p>
+                ))}
+                {Cookies.get('token') && showCommentForm && (
+                    <CommentForm onSubmit={handleComment}>
+                        <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
+                        <button type="submit">Comentar</button>
+                    </CommentForm>
                 )}
             </div>
-            <img src={banner} alt="Imagem" />
-        </CardBody>
+        )}
     </CardContainer>
-)
+);
 }

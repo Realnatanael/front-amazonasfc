@@ -17,7 +17,7 @@ export const CardBody = styled.article`
     width: 100%;
     height: 100%;
 
-    div {
+    div.content {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -25,10 +25,17 @@ export const CardBody = styled.article`
         width: 100%;
     }
 
+    div.image-container {
+        width: 65%;
+        max-height: 300px; 
+        overflow: hidden;
+    }
+
     img {
-      width: 50%;
-      object-fit: cover; // a imagem cobre todo o espaço
-      object-position: center; // centraliza a imagem
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+      object-position: center; 
       border-radius: 0 0.8rem 0.8rem 0;
     }
 `
@@ -58,6 +65,10 @@ export const CardHeader = styled.article`
         color: #fff;
         text-decoration: none;
         border: none;
+    }
+
+    p{
+        padding-bottom: 1rem;
     }
 `
 
