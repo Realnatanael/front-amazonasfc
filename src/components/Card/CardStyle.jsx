@@ -115,4 +115,9 @@ export const Commentdiv = styled.div`
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
+
+    p.data {
+        font-size: 0.8rem;
+        color: #999;
+    }
 `;

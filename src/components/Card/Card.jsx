@@ -113,9 +113,14 @@ return (
                {comments?.map((comment, index) => {
                     const color = colorMap[comment.username];
                     return (
-                        <p key={index}>
+                        <div key={index}>
+                            <p>
                             <span style={{color: color}}>{comment.username}</span>: {comment.comment}
-                        </p>
+                            </p>
+                            <p className="data">Em:
+                                {new Date(comment.createdAt).toLocaleDateString()} - {new Date(comment.createdAt).toLocaleTimeString()}
+                            </p>
+                        </div>
                     );
                 })}
                 {Cookies.get('token') && showCommentForm && (
