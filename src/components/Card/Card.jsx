@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
-import { CardBody, CardContainer, CardFooter, CardHeader, CommentForm } from "./CardStyle";
+import { CardBody, CardContainer, CardFooter, CardHeader, CommentForm, Commentdiv } from "./CardStyle";
 import { likeNews, addComment } from "../../services/postsServices";
 import Cookies from 'js-cookie';
 import { ErrorSpan } from "../Navbar/NavbarStyled";
-import { set } from "react-hook-form";
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 export function Card({top, title, text, banner, likes, comments, actions=false, id}){
 
@@ -15,6 +23,17 @@ export function Card({top, title, text, banner, likes, comments, actions=false, 
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [showComments, setShowComments] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [colorMap, setColorMap] = useState({});
+
+    useEffect(() => {
+        const newColorMap = {...colorMap};
+        comments?.forEach(comment => {
+            if (!colorMap[comment.username]) {
+                newColorMap[comment.username] = getRandomColor();
+            }
+        });
+        setColorMap(newColorMap);
+    }, [comments, colorMap]);
 
     const handleLike = async () => {
     try {
@@ -70,7 +89,7 @@ return (
                         </span>
                     )}
                     <h2>{title}</h2>
-                    <TextLimit text= {text} limit={180}/>
+                    <TextLimit text= {text} limit={280}/>
                 </CardHeader>
                 
                 <CardFooter>
@@ -90,17 +109,22 @@ return (
         </CardBody>
         {showError && <ErrorSpan>Faça login para comentar</ErrorSpan>}
         {showComments && (
-            <div>
-                {comments?.map((comment, index) => (
-                    <p key={index}>{comment.username}:{comment.comment}</p>
-                ))}
+            <Commentdiv>
+               {comments?.map((comment, index) => {
+                    const color = colorMap[comment.username];
+                    return (
+                        <p key={index}>
+                            <span style={{color: color}}>{comment.username}</span>: {comment.comment}
+                        </p>
+                    );
+                })}
                 {Cookies.get('token') && showCommentForm && (
                     <CommentForm onSubmit={handleComment}>
                         <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
                         <button type="submit">Comentar</button>
                     </CommentForm>
                 )}
-            </div>
+            </Commentdiv>
         )}
     </CardContainer>
 );

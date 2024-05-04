@@ -77,6 +77,16 @@ export const ErrorSpan = styled.span`
     font-weight: bold;
 `;
 
+export const SuccessSpan = styled.span`
+    background-color: #a7f3d0;
+    color: #00fe00;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+`;
+
 export const UserLoggerSpace = styled.div`
     display: flex;
     align-items: center;

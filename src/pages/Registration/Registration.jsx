@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "../../Schemas/SignupSchema";
 import { ErrorSpan } from "../../components/Navbar/NavbarStyled";
 import { signup } from "../../services/userServices";
-
+import { useState } from 'react';
+import { SuccessSpan } from "../../components/Navbar/NavbarStyled";
 
 export function Registration (){
     const { 
@@ -15,12 +16,16 @@ export function Registration (){
         formState: {errors: errorsSignup}, 
     } = useForm({resolver: zodResolver(signupSchema)});
 
+    const [isSignupSuccessful, setSignupSuccessful] = useState(false);
+
     async function upHanleSubmit(data){
         try{
             const response = await signup(data);
             console.log(response);
+            setSignupSuccessful(true);
         } catch (error){
             console.error(error);
+            setSignupSuccessful(false);
         }
     }
 
@@ -36,6 +41,7 @@ export function Registration (){
                 {errorsSignup.password && (<ErrorSpan>{errorsSignup.password.message}</ErrorSpan>)}
                 <Input type="password" placeholder="Confirme a senha" name="confirmPassword" register={registerSignup}/>
                 {errorsSignup.confirmPassword && (<ErrorSpan>{errorsSignup.confirmPassword.message}</ErrorSpan>)}
+                {isSignupSuccessful && <SuccessSpan>Cadastro realizado com sucesso!</SuccessSpan>}
                 <Button type="submit" text="Cadastrar"/>
                 </form>
             </Section>

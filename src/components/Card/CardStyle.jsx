@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const CardContainer = styled.section`
 display: flex;
     flex-direction: column;
-    gap: 1rem;
     max-width: 100%;
 
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.675);
@@ -16,6 +15,8 @@ export const CardBody = styled.article`
     display: flex;
     width: 100%;
     height: 100%;
+    border-radius: 0.8rem;
+    border-bottom: 2px solid #0c0c0c;
 
     div.content {
         display: flex;
@@ -28,7 +29,7 @@ export const CardBody = styled.article`
     div.image-container {
         width: 65%;
         max-height: 300px; 
-        overflow: hidden;
+        overflow: hidden;   
     }
 
     img {
@@ -107,4 +108,11 @@ export const CommentForm = styled.form`
         background-color: #e7a71d;
         color: #000;
     }
+`;
+
+export const Commentdiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
 `;
