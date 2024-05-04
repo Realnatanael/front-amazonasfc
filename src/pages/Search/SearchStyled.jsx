@@ -8,7 +8,7 @@ export const ContainerResults = styled.div`
     align-items: center;
 
     img{
-        width: 50%;
+        width: 100%;
     }
 `
 

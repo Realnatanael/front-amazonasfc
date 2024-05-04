@@ -120,4 +120,13 @@ export const Commentdiv = styled.div`
         font-size: 0.8rem;
         color: #999;
     }
+    i {
+        color: #171717;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+        i:hover {
+        color:  #fff;
+    }
 `;

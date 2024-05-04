@@ -129,12 +129,11 @@ return (
                 <Commentdiv>
                    {comments?.map((comment, index) => {
                         const color = colorMap[comment.username];
+                        const loggedInUser = Cookies.get('username');
                         return (
                             <div key={index}>
                                 <p>
-                                <span style={{color: color}}>{comment.username}</span>: {comment.comment}
-                                {Cookies.get('token') && (
-                                    <i className="bi bi-trash3" onClick={() => handleDeleteComment(comment)}></i>)}
+                                <span style={{color: color}}>{comment.username}</span>: {comment.comment} {Cookies.get('token') &&  loggedInUser === comment.username && ( <i className="bi bi-trash3" onClick={() => handleDeleteComment(comment)}></i>)}
                                 </p>
                                 <p className="data">Em:
                                     {new Date(comment.createdAt).toLocaleDateString()} - {new Date(comment.createdAt).toLocaleTimeString()}
