@@ -72,3 +72,34 @@ export const CardFooter = styled.article`
         gap: 0.2rem;
     }
 `
+
+export const CommentForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #282828;
+    border-radius: 0.8rem;
+
+    input {
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.4rem;
+        background-color: #fff;
+    }
+
+    button {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.4rem;
+        background-color: #fcba30;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #e7a71d;
+        color: #000;
+    }
+`;
