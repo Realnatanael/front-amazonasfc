@@ -11,6 +11,7 @@ export function Card({top, title, text, banner, likes, comments, actions=false, 
     const [liked, setLiked] = useState(false);
     const [comment, setComment] = useState('');
     const [showCommentForm, setShowCommentForm] = useState(false);
+    const [showComments, setShowComments] = useState(false);
 
     const handleLike = async () => {
     try {
@@ -41,51 +42,59 @@ const handleComment = async () => {
 };
 
  const toggleCommentForm = () => {
-        if (Cookies.get('token')) {
-            setShowCommentForm(!showCommentForm);
-        } else {
-            alert('Você precisa estar logado para comentar.');
-        }
-    };
+    setShowComments(!showComments);
+    if (Cookies.get('token')) {
+        setShowCommentForm(!showCommentForm);
+    } else {
+        alert('Você precisa estar logado para comentar.');
+    }
+};
 
-    return (
-        <CardContainer>
-            <CardBody >
-                <div>
-                    <CardHeader top={top}>
-                        {actions && (
-                            <span>
-                                <Link to={`/manage-news/edit/${id}`}>
-                                     <i className="bi bi-pencil-square"></i>
-                                </Link>
-                                <Link to={`/manage-news/delete/${id}`}>
-                                    <i className="bi bi-trash3"></i>
-                                </Link>
-                            </span>
-                        )}
-                        <h2>{title}</h2>
-                        <TextLimit text= {text} limit={180}/>
-                    </CardHeader>
-                    
-                    <CardFooter>
-                        <section>
-                            <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
-                            <span>{likeCount}</span>
-                        </section>
-                        <section> 
-                        <i className="bi bi-chat" onClick={toggleCommentForm}></i>
-                            <span>{comments?.length}</span>
-                        </section>
-                    </CardFooter>
-                    {showCommentForm && (
-                        <CommentForm onSubmit={handleComment}>
-                            <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
-                            <button type="submit">Comentar</button>
-                        </CommentForm>
+return (
+    <CardContainer>
+        <CardBody >
+            <div>
+                <CardHeader top={top}>
+                    {actions && (
+                        <span>
+                            <Link to={`/manage-news/edit/${id}`}>
+                                    <i className="bi bi-pencil-square"></i>
+                            </Link>
+                            <Link to={`/manage-news/delete/${id}`}>
+                                <i className="bi bi-trash3"></i>
+                            </Link>
+                        </span>
                     )}
-                </div>
-                <img src={banner} alt="Imagem" />
-            </CardBody>
-        </CardContainer>
-    )
+                    <h2>{title}</h2>
+                    <TextLimit text= {text} limit={180}/>
+                </CardHeader>
+                
+                <CardFooter>
+                    <section>
+                        <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
+                        <span>{likeCount}</span>
+                    </section>
+                    <section> 
+                    <i className="bi bi-chat" onClick={toggleCommentForm}></i>
+                        <span>{comments?.length}</span>
+                    </section>
+                </CardFooter>
+                {showComments && (
+                    <div>
+                        {comments?.map((comment, index) => (
+                            <p key={index}>{comment.comment}</p>
+                        ))}
+                        {Cookies.get('token') && showCommentForm && (
+                            <CommentForm onSubmit={handleComment}>
+                                <input type="text" value={comment} onChange={e => setComment(e.target.value)} />
+                                <button type="submit">Comentar</button>
+                            </CommentForm>
+                        )}
+                    </div>
+                )}
+                            </div>
+            <img src={banner} alt="Imagem" />
+        </CardBody>
+    </CardContainer>
+)
 }
