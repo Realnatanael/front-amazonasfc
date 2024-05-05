@@ -72,8 +72,6 @@ const handleComment = async (event) => {
         const response = await addComment(id, comment);
 
         if (response && response.status === 200) {
-            // Atualize a lista de comentários no estado do componente
-            console.log(response.data);
             setComments(prevComments => [...prevComments, response.data.comment]);
             setComment(''); // Limpe o campo de comentário
         } else {

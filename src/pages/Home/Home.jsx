@@ -15,7 +15,6 @@ export default function Home(){
         setPosts(postsResponse.data.results);
 
         const topPostResponse = await getTopPosts();
-        //console.log(topPostResponse.data);
         setTopPosts(topPostResponse.data.news);
     }
 

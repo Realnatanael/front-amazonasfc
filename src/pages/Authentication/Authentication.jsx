@@ -40,9 +40,6 @@ export function Authentication(){
             // Salvar o nome de usuário em um cookie
             Cookies.set('username', username, {expires: 1});
     
-            // Dar um console.log do token
-            console.log(token);
-    
             // Navegar para a página "/"
             navigate('/');
         } catch (error) {

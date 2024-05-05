@@ -3,8 +3,6 @@ import { InputSpace, TextareaSpace } from "./InputStyled";
 
 
 export function Input({type, placeholder, name, register, isInput = true, value: initialValue = '', disabled}){
-    console.log('isInput', isInput);
-    console.log('initialValue', initialValue);
     const [value, setValue] = useState(initialValue || '');
     let inputProps = {
         type,

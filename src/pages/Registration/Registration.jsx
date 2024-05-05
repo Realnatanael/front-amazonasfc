@@ -21,7 +21,6 @@ export function Registration (){
     async function upHanleSubmit(data){
         try{
             const response = await signup(data);
-            console.log(response);
             setSignupSuccessful(true);
         } catch (error){
             console.error(error);
