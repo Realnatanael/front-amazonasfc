@@ -117,3 +117,15 @@ export function deleteComment(idNews, idComment){
   });
   return response;
 }
+
+export function isNewsLiked(id){
+  const response = axios.get(`${baseURL}/news/isLiked/${id}`, {
+      headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`,
+      }
+  })
+  .catch(error => {
+      console.error('Houve um erro ao verificar se a notícia foi curtida:', error);
+  });
+  return response;
+}

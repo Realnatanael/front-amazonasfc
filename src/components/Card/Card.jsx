@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader, CommentForm, Commentdiv } from "./CardStyle";
-import { likeNews, addComment, deleteComment } from "../../services/postsServices"; 
+import { likeNews, addComment, deleteComment, isNewsLiked } from "../../services/postsServices"; 
 import Cookies from 'js-cookie';
 import { ErrorSpan } from "../Navbar/NavbarStyled";
 
@@ -36,6 +36,20 @@ export function Card({top, title, text, banner, likes, comments: initialComments
         });
         setColorMap(newColorMap);
     }, [comments]);
+
+    useEffect(() => {
+        const checkIfLiked = async () => {
+            try {
+                const response = await isNewsLiked(id);
+                if (response && response.status === 200) {
+                    setLiked(response.data.liked);
+                }
+            } catch (error) {
+                console.error('Erro ao verificar se a notícia foi curtida:', error);
+            }
+        };
+        checkIfLiked();
+    }, [id]);
 
     const handleLike = async () => {
     try {
