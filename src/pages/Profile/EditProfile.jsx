@@ -5,8 +5,9 @@ import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
 import { updateUser, userLogged } from "../../services/userServices";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {z} from 'zod'
+import { EditProfileContainer } from "./EditProfileStyled";
 
 const userSchema = z.object({
     name: z.string().nonempty({ message: 'Nome é obrigatório' }),
@@ -14,10 +15,11 @@ const userSchema = z.object({
     email: z.string().email({ message: 'Email inválido' }),
     avatar: z.string().url({ message: 'URL do Avatar inválido' }),
     background: z.string().url({ message: 'URL do Background inválido' }),
-  });
+});
 
-    export function EditProfile() {
+export function EditProfile() {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     const {
         register: registerUser,
@@ -28,8 +30,11 @@ const userSchema = z.object({
 
     async function editUserSubmit(data){
         try {
-            await updateUser(data);
-            navigate("/profile");
+            const response = await userLogged();
+            if (response.data && response.data.user) {
+                await updateUser(data, response.data.user._id);
+                navigate("/profile");
+            }
         } catch (error) {
             console.error(error);
         }
@@ -38,24 +43,29 @@ const userSchema = z.object({
     async function findUser(){
         try {
             const response = await userLogged();
-            if (response.data && response.data.user) {
-                setValue("name", response.data.user.name);
-                setValue("username", response.data.user.username);
-                setValue("email", response.data.user.email);
-                setValue("avatar", response.data.user.avatar);
-                setValue("background", response.data.user.background);
+            if (response.data) {
+                setValue("name", response.data.name);
+                setValue("username", response.data.username);
+                setValue("email", response.data.email);
+                setValue("avatar", response.data.avatar);
+                setValue("background", response.data.background);
             }
+            setLoading(false);
         } catch (error) {
             console.error(error);
         }
     }
-
+    
     useEffect(() => {
         findUser()
     }, []);
 
+    if (loading) {
+        return <div>Carregando...</div>;
+    }
+
     return (
-        <div>
+        <EditProfileContainer>
             <h2>Editar Perfil</h2>
             <form onSubmit={handleRegisterUser(editUserSubmit)}>
                 <Input
@@ -99,6 +109,6 @@ const userSchema = z.object({
                     text="Atualizar"
                 />
             </form>
-        </div>
+        </EditProfileContainer>
     )
 }
