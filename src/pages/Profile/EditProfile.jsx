@@ -31,12 +31,13 @@ export function EditProfile() {
     async function editUserSubmit(data){
         try {
             const response = await userLogged();
-            if (response.data && response.data.user) {
-                await updateUser(data, response.data.user._id);
-                navigate("/profile");
+            if (response.data) {
+                return await updateUser(data, response.data._id);
+            } else {
+                console.log("Dados de usuário não encontrados em userLogged"); 
             }
         } catch (error) {
-            console.error(error);
+            console.error("Erro em userLogged:", error);
         }
     }
 

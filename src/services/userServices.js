@@ -42,13 +42,31 @@ function generateUsername(name){
     const randomNumber = Math.floor(Math.random() * 1000);
     return `${nameLowerCaseWithoutSpace}-${randomNumber}`;   
 }
-export function updateUser(data, id){
-    const token = Cookies.get('token');
 
-    const response = axios.patch(`${baseURL}/user/${id}`, data, {
+export function updateUser(data){
+    const token = Cookies.get('token');
+    if (!token) {
+        throw new Error('Token não definido');
+    }
+
+    const decoded = jwtDecode(token);
+    const userId = decoded.id;
+
+    if (!userId) {
+        throw new Error('ID do usuário não definido');
+    }
+
+    console.log("ID do usuário em updateUser:", userId); 
+
+    const response = axios.patch(`${baseURL}/user/${userId}`, data, {
         headers: {
             Authorization: `Bearer ${token}`,
         }
+    }).then(response => {
+        return response;
+    }).catch(error => {
+        throw error;
     });
+
     return response;
 }
