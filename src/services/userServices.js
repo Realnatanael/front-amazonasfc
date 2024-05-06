@@ -17,12 +17,21 @@ export function signup(data){
 }
 
 export function userLogged(){
-    const decoded = jwtDecode(Cookies.get('token'));
+    const token = Cookies.get('token');
+    if (!token) {
+        throw new Error('Token não definido');
+    }
+
+    const decoded = jwtDecode(token);
     const userId = decoded.id;
+
+    if (!userId) {
+        throw new Error('ID do usuário não definido');
+    }
 
     const response = axios.get(`${baseURL}/user/${userId}`, {
         headers: {
-            Authorization: `Bearer ${Cookies.get('token')}`,
+            Authorization: `Bearer ${token}`,
         }
     });
     return response;
@@ -32,4 +41,14 @@ function generateUsername(name){
     const nameLowerCaseWithoutSpace = name.replace(/\s/g, '').toLowerCase();
     const randomNumber = Math.floor(Math.random() * 1000);
     return `${nameLowerCaseWithoutSpace}-${randomNumber}`;   
+}
+export function updateUser(data, id){
+    const token = Cookies.get('token');
+
+    const response = axios.patch(`${baseURL}/user/${id}`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+    return response;
 }

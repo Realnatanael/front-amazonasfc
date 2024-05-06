@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { Navbar } from './components/Navbar/Navbar.jsx'
 import Home from './pages/Home/Home.jsx'
@@ -12,6 +11,7 @@ import { Registration } from './pages/Registration/Registration.jsx'
 import { Profile } from './pages/Profile/Profile.jsx'
 import UserProvider from './Context/UserContext.jsx'
 import { ManageNews } from './pages/ManageNews/ManageNews.jsx'
+import { EditProfile } from './pages/Profile/EditProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +30,10 @@ const router = createBrowserRouter([
     {
       path: "/profile",
       element: <Profile/>,
+    },
+    {
+      path: "/edit-profile/:id",
+      element: <EditProfile/>
     },
     {
       path: "/manage-news/:action/:id",

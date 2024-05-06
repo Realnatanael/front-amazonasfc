@@ -4,10 +4,12 @@ import { ProfileActions, ProfileAvatar, ProfileBackground, ProfileContainer, Pro
 import { getAllPostsByUser } from "../../services/postsServices";
 import { Card } from "../../components/Card/Card";
 import { Link } from "react-router-dom";
+import { userLogged } from "../../services/userServices"
 
 export function Profile(){
     const [user] = useContext(UserContext);
     const [news, setNews] = useState([]);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -22,11 +24,26 @@ export function Profile(){
         fetchNews();
     }, []);
 
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const response = await userLogged();
+                setUserId(response.data._id);
+            } catch (error) {
+                console.error('Erro ao buscar ID do usuário:', error);
+            }
+        };
+    
+        fetchUserId();
+    }, []);
+
     return (
         <ProfileContainer>
             <ProfileHeader>
                 <ProfileIconEdit>
-                    <i className="bi bi-pencil-square"></i>
+                    {userId && <Link to={`/edit-profile/${userId}`}>
+                        <i className="bi bi-pencil-square"></i>
+                    </Link>}
                 </ProfileIconEdit>
                 <ProfileBackground src={user.background} alt=""/>
                 <ProfileUser>
