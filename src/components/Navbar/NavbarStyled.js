@@ -28,6 +28,7 @@ export const InputSpace = styled.div`
     display: flex;
     align-items: center;
     margin-left: 1rem;
+    color: darkgray;
 
     button {
         position: absolute;
