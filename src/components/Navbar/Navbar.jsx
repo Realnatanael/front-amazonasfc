@@ -73,7 +73,7 @@ export function Navbar(){
                         <Button  type="button" text="Entrar">Entrar</Button>
                     </Link>
                 )}
-
+                
                 
             </Nav>
             {errors.title && <ErrorSpan>{errors.title.message}</ErrorSpan>}
