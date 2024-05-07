@@ -16,7 +16,7 @@ function getRandomColor() {
     return color;
 }
 
-export function Card({top, title, text, banner, likes, comments: initialComments, actions=false, id}){
+export function Card({top, title, text, banner, likes, comments: initialComments, actions=false, id, username}){
 
     const [likeCount, setLikeCount] = useState(likes?.length || 0);
     const [liked, setLiked] = useState(false);
@@ -129,6 +129,9 @@ return (
                     <section> 
                     <i className="bi bi-chat" onClick={toggleCommentForm}></i>
                         <span>{comments?.length}</span>
+                    </section>
+                    <section>
+                        <span>Publicado por: {username}</span>
                     </section>
                 </CardFooter>
             </div>

@@ -83,6 +83,12 @@ export const CardFooter = styled.article`
         align-items: center;
         gap: 0.2rem;
     }
+
+    section:last-child {
+        margin-left: auto;
+        font-size: 0.7rem;
+        color: #999;
+    }
 `
 
 export const CommentForm = styled.form`

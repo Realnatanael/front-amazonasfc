@@ -35,6 +35,7 @@ export default function Home(){
                         banner={topPosts.banner}
                         likes={topPosts.likes}
                         comments={topPosts.comments}
+                        username={topPosts.username}
                     />
                 }
             </HomeHeader>
@@ -49,6 +50,7 @@ export default function Home(){
                     banner={item.banner}
                     likes={item.likes}
                     comments={item.comments}
+                    username={item.username}
                 />
                 })}
             </HomeBody>

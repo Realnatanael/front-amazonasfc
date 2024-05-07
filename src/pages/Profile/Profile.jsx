@@ -76,6 +76,7 @@ export function Profile(){
                         comments= {item.comments}
                         actions= {true}
                         userId= {user.id}
+                        username= {user.username}
                         />
                     )
                 })}

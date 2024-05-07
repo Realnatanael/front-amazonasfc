@@ -44,6 +44,7 @@ export function Search() {
                         banner={item.banner}
                         likes={item.likes}
                         comments={item.comments}
+                        username={item.username}
                     />
                 ))}
             </SearchPosts>
