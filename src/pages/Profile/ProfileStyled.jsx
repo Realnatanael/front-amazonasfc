@@ -33,6 +33,12 @@ export const ProfileIconEdit = styled.div`
         color: #f7f7f7;
         box-shadow: 0 0 2rem #fcbb3080;
     }
+
+    a {
+        color: black;
+        text-decoration: none;
+    
+    }
 `
 
 export const ProfileBackground = styled.img`

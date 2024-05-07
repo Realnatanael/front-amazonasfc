@@ -32,7 +32,10 @@ export function EditProfile() {
         try {
             const response = await userLogged();
             if (response.data) {
-                return await updateUser(data, response.data._id);
+                const updateResponse = await updateUser(data, response.data._id);
+                if(updateResponse.status === 200) { // Verifique o status de resposta correto com base em sua API
+                    navigate("/profile");
+                }
             } else {
                 console.log("Dados de usuário não encontrados em userLogged"); 
             }

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { userLogged } from "../../services/userServices"
 
 export function Profile(){
-    const [user] = useContext(UserContext);
+    const [user, setUser] = useContext(UserContext);
     const [news, setNews] = useState([]);
     const [userId, setUserId] = useState(null);
 
@@ -25,17 +25,19 @@ export function Profile(){
     }, []);
 
     useEffect(() => {
-        const fetchUserId = async () => {
+        const fetchUserAndUserId = async () => {
             try {
                 const response = await userLogged();
+                setUser(response.data);
                 setUserId(response.data._id);
             } catch (error) {
-                console.error('Erro ao buscar ID do usuário:', error);
+                console.error('Erro ao buscar dados do usuário:', error);
             }
         };
     
-        fetchUserId();
+        fetchUserAndUserId();
     }, []);
+
 
     return (
         <ProfileContainer>
