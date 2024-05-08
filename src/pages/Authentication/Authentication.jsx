@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 
-const baseURL = 'http://localhost:3000'
+const baseURL = 'https://amazonas-fc.vercel.app'
 
 export function Authentication(){
     const navigate = useNavigate();

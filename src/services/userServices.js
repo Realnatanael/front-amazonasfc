@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
-const baseURL = 'http://localhost:3000';
+const baseURL = 'https://amazonas-fc.vercel.app';
 
 export function signup(data){
     delete data.confirmPassword;

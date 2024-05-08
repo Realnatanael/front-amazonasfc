@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const baseURL = 'http://localhost:3000'
+const baseURL = 'https://amazonas-fc.vercel.app'
 
 export function getAllPosts() {
   return axios.get(`${baseURL}/news`)
