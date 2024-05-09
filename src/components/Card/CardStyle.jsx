@@ -13,6 +13,7 @@ display: flex;
 
 export const CardBody = styled.article`
     display: flex;
+    flex-direction: row;
     width: 100%;
     height: 100%;
     border-radius: 0.8rem;
@@ -24,12 +25,14 @@ export const CardBody = styled.article`
         justify-content: space-between;
         padding: 1rem;
         width: 100%;
+        order: 1; // Adicionado
     }
 
     div.image-container {
         width: 65%;
         max-height: 300px; 
         overflow: hidden;   
+        order: 2;
     }
 
     img {
@@ -38,6 +41,25 @@ export const CardBody = styled.article`
       object-fit: cover; 
       object-position: center; 
       border-radius: 0 0.8rem 0.8rem 0;
+    }
+
+    @media (max-width: 720px) {
+        flex-direction: column;
+
+        div.content {
+            order: 2; // Adicionado
+            width: 93%;
+        }
+
+        img {
+            border-radius: 0.8rem 0.8rem 0 0;
+        }
+
+        div.image-container {
+            width: 100%;
+            max-height: none;
+            order: 1;
+        }
     }
 `
 

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Nav = styled.nav`
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     max-width: 100%;
@@ -14,24 +15,50 @@ export const Nav = styled.nav`
     p{
         color: #fcba15;
     }
+
+    @media (max-width: 720px) {
+        background-color: #201e1e;
+    }
+`;
+
+export const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    form {
+        @media (max-width: 420px) {
+            width: 30%;
+            margin-left: 1rem;
+        }
+    }
 `;
 
 export const ImageLogo = styled.img`
     height:3.4rem;
     object-fit: cover;
     cursor: pointer;
+
+    
 `;
 
 export const InputSpace = styled.div`
-    position: relative;
+    position: relative; //Para o botão ficar por cima do input e não empurrar ele para baixo
     width: 260px;
     display: flex;
     align-items: center;
     margin-left: 1rem;
     color: darkgray;
 
+    @media (max-width: 420px) {
+            width: 100%;
+            margin-left: 1rem;
+        }
+
     button {
-        position: absolute;
+        position: absolute; //Para ficar por cima do input e não empurrar ele para baixo
         top: 1;
         right: 0.1rem;
         z-index: 10;
@@ -42,6 +69,8 @@ export const InputSpace = styled.div`
         padding: .5rem;
         cursor: pointer;
         transition: 0.5s;
+
+
     }
 
     button:hover{
@@ -58,6 +87,7 @@ export const InputSpace = styled.div`
         border: 2px solid #5e5d5c; 
         width: 100%;
         border-radius: 0.3rem;
+        
         
         &:focus{
             border:2px solid #fcba1596;

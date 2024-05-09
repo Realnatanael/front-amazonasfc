@@ -1,17 +1,33 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import logo from '../../images/AmazonasFansLogo.png'
-import {ImageLogo, Nav, InputSpace, ErrorSpan, UserLoggerSpace } from '../Navbar/NavbarStyled'
+import logo2 from "../../images/amazonas-futebol-clube-seeklogo.png"
+import {ImageLogo, Nav, InputSpace, ErrorSpan, UserLoggerSpace, Container } from  "../Navbar/NavbarStyled"
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../Button/Button';
 import { searchSchema } from '../../Schemas/SearchSchema';
 import Cookies from 'js-cookie';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { userLogged } from '../../services/userServices';
 import { UserContext } from '../../Context/UserContext';
 
 
 export function Navbar(){
+    const [logoSrc, setLogoSrc] = useState(logo);
+    useEffect(() => {
+        const updateLogo = () => {
+            if (window.innerWidth < 720) {
+                setLogoSrc(logo2);
+            } else {
+                setLogoSrc(logo);
+            }
+        };
+
+        window.addEventListener('resize', updateLogo);
+        updateLogo();
+
+        return () => window.removeEventListener('resize', updateLogo);
+    }, []);
     const {register, handleSubmit, reset, formState: {errors}} = useForm({
         resolver: zodResolver(searchSchema),
     });
@@ -48,6 +64,7 @@ export function Navbar(){
     return (
        <>
             <Nav>
+                <Container>
                 <form onSubmit={handleSubmit(onSearch)}>
                     <InputSpace >
                         <button type='submit'>
@@ -58,7 +75,7 @@ export function Navbar(){
                 </form>
 
                 <Link to="/">
-                    <ImageLogo src={logo} alt="Logo Amazonas Posts" />
+                   <ImageLogo src={logoSrc} alt="Logo Amazonas Posts" />
                 </Link>
 
                 {user ? (
@@ -73,7 +90,7 @@ export function Navbar(){
                         <Button  type="button" text="Entrar">Entrar</Button>
                     </Link>
                 )}
-                
+                </Container>
                 
             </Nav>
             {errors.title && <ErrorSpan>{errors.title.message}</ErrorSpan>}
