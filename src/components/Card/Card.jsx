@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { TextLimit } from "../TextLimit/TextLimit";
 import { CardBody, CardContainer, CardFooter, CardHeader, CommentForm, Commentdiv } from "./CardStyle";
@@ -26,6 +26,12 @@ export function Card({top, title, text, banner, likes, comments: initialComments
     const [showError, setShowError] = useState(false);
     const [colorMap, setColorMap] = useState({});
     const [comments, setComments] = useState(initialComments);
+    const cardRef = useRef();
+
+    useEffect(() => {
+        // Quando o componente é montado, move o foco para o Card.
+        cardRef.current.focus();
+      }, []);
 
     useEffect(() => {
         const newColorMap = {...colorMap};
@@ -103,6 +109,7 @@ async function handleDeleteComment(comment) {
 };
 
 return (
+    <div tabIndex={0} ref={cardRef}aria-label={`Título: ${title}. Texto: ${text}. Curtidas: ${likeCount}... Comentários: ${comments?.length}.`}>
     <CardContainer>
         <CardBody >
             <div className="content">
@@ -122,11 +129,11 @@ return (
                 </CardHeader>
                 
                 <CardFooter>
-                    <section>
+                    <section tabIndex={0} aria-label="Curtir" >
                         <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
                         <span>{likeCount}</span>
                     </section>
-                    <section> 
+                    <section tabIndex={0} aria-label="Comentário"> 
                     <i className="bi bi-chat" onClick={toggleCommentForm}></i>
                         <span>{comments?.length}</span>
                     </section>
@@ -165,5 +172,6 @@ return (
                 </Commentdiv>
             )}
         </CardContainer>
+        </div>
 );
 }

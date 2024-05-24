@@ -11,3 +11,13 @@ export const HomeHeader = styled.header`
     width: 80%;
     margin: 1rem auto;
 `
+export const ScreenReaderMessage = styled.div`
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+`;

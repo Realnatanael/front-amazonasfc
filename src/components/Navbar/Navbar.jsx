@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../../images/AmazonasFansLogo.png'
 import logo2 from "../../images/amazonas-futebol-clube-seeklogo.png"
 import {ImageLogo, Nav, InputSpace, ErrorSpan, UserLoggerSpace, Container } from  "../Navbar/NavbarStyled"
@@ -10,10 +10,17 @@ import Cookies from 'js-cookie';
 import { useContext, useEffect, useState } from 'react';
 import { userLogged } from '../../services/userServices';
 import { UserContext } from '../../Context/UserContext';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { ButtonRefContext } from '../context/ButtonRefContext';
+import { ScreenReaderMessage } from '../../pages/Home/HomeStyled';
 
 
 export function Navbar(){
     const [logoSrc, setLogoSrc] = useState(logo);
+    const loginButtonRef = useContext(ButtonRefContext);
+    const location = useLocation();
+
+    useHotkeys('ArrowLeft', () => loginButtonRef.current.focus());
     useEffect(() => {
         const updateLogo = () => {
             if (window.innerWidth < 720) {
@@ -55,6 +62,11 @@ export function Navbar(){
         navigate('/');
     }
 
+    useEffect(() => {
+        // Quando a rota muda, move o foco para o início da página.
+        document.getElementById('Navbar').focus();
+      }, [location]);
+
     useEffect(()=>{
         if (Cookies.get("token")) {
             findUserLogged();
@@ -63,32 +75,37 @@ export function Navbar(){
 
     return (
        <>
-            <Nav>
+            <Nav aria-label='Cabeçalho' tabIndex={0} id='Navbar'> 
                 <Container>
-                <form onSubmit={handleSubmit(onSearch)}>
-                    <InputSpace >
-                        <button type='submit'>
-                            <i className='bi bi-search'></i>
+                <form onSubmit={handleSubmit(onSearch)}     >
+                    <InputSpace tabIndex={-1} >
+                        <button type='submit' tabIndex="-1">
+                            <i className='bi bi-search' tabIndex="-1"></i>
                         </button>
-                        <input {...register("title")} type="text" placeholder='Pesquisar'/>
+                        <input {...register("title")} type="text" placeholder='Pesquisar' aria-label=' Enter se quiser pesquisar por notícias, ou Tab para Pular para o login'/>
                     </InputSpace>
                 </form>
 
-                <Link to="/">
-                   <ImageLogo src={logoSrc} alt="Logo Amazonas Posts" />
+                <Link to="/" tabIndex={-1}>
+                   <ImageLogo src={logoSrc} alt="Logo Amazonas Posts"  tabIndex="-1"/>
                 </Link>
 
                 {user ? (
-                    <UserLoggerSpace>
+                    <UserLoggerSpace >
                         <Link to="/profile">
                         <h2>{user.name}</h2>
                         </Link>
                         <i className='bi bi-box-arrow-right' onClick={signout}></i>
                     </UserLoggerSpace>
                 ): (
-                    <Link to="/auth">
-                        <Button  type="button" text="Entrar">Entrar</Button>
+                    <ButtonRefContext.Provider value={loginButtonRef} >
+                    <Link to="/auth" tabIndex={-1}>
+                        <ScreenReaderMessage >
+                            Clique enter se quiser entrar como usuário
+                        </ScreenReaderMessage>
+                        <Button  type="button" text="Entrar" tabindex="0"   role="button">Entrar</Button>
                     </Link>
+                    </ButtonRefContext.Provider>
                 )}
                 </Container>
                 

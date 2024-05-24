@@ -1,14 +1,22 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Card } from "../../components/Card/Card";
 import { getAllPosts, getTopPosts } from "../../services/postsServices";
-import { HomeBody, HomeHeader } from "./HomeStyled";
+import { HomeBody, HomeHeader, ScreenReaderMessage } from "./HomeStyled";
 import Cookies from 'js-cookie';
+import { useHotkeys } from "react-hotkeys-hook";
+import { ButtonRefContext } from "../../components/context/ButtonRefContext";
 
 export default function Home(){
 
+    const loginRef = useRef();
+    const postRef = useRef();
     const [posts, setPosts] = useState([]); 
     const [topPosts, setTopPosts] = useState(null); 
     const userId = Cookies.get('userId');
+    const loginButtonRef = useContext(ButtonRefContext);
+
+    useHotkeys('ArrowDown', () => postRef.current.focus())
+    useHotkeys('ArrowLeft', () => loginButtonRef.current.focus())
 
     async function findPost(){
         const postsResponse = await getAllPosts();
@@ -18,6 +26,22 @@ export default function Home(){
         setTopPosts(topPostResponse.data.news);
     }
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            switch(event.key) {
+                case 'ArrowLeft':
+                    loginRef.current.focus();
+                    break;
+                case 'ArrowDown':
+                    postsRef.current.focus();
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+    , []);
+    
     useEffect(()=>{
         findPost();
     }, []);
@@ -27,6 +51,7 @@ export default function Home(){
             <HomeHeader>
                 {topPosts && topPosts.title && 
                     <Card 
+                        tabIndex={1}
                         userId={userId}
                         top={true.toString()}
                         id={topPosts.id}
@@ -39,9 +64,10 @@ export default function Home(){
                     />
                 }
             </HomeHeader>
-            <HomeBody>
+            <HomeBody >
                 {posts && topPosts && posts.filter(post => post.id !== topPosts.id).map((item, index) => {
                 return <Card 
+                    tabIndex={index + 2}
                     userId={userId}
                     key={item.id} 
                     id={item.id}
