@@ -16,8 +16,8 @@ export default function Home() {
     const userId = Cookies.get('userId');
     const loginButtonRef = useContext(ButtonRefContext);
     const [isNarrationActive, setIsNarrationActive] = useState(false);
-    const speak = (text) => {
-        if (isNarrationActive) {
+    const speak = (text, alwaysSpeak = false) => {
+        if (alwaysSpeak || isNarrationActive) {
             const utterance = new SpeechSynthesisUtterance(text);
             speechSynthesis.speak(utterance);
         }
@@ -62,7 +62,7 @@ export default function Home() {
     return (
         <>
             <FloatingButton
-                onMouseEnter={() => speak('Ativar modo leitura de tela?')}
+                onMouseEnter={() => speak(isNarrationActive ? 'Desativar modo leitura de tela?' : 'Ativar modo leitura de tela?', true)}
                 onClick={() => {
                     const newNarrationState = !isNarrationActive;
                     setIsNarrationActive(newNarrationState);
@@ -70,7 +70,7 @@ export default function Home() {
                 }}
             >
                 <MdAccessibilityNew />
-                <span className="tooltip-text">Ativar modo leitura de tela?</span>
+                <span className="tooltip-text">{isNarrationActive ? 'Desativar modo leitura de tela?' : 'Ativar modo leitura de tela?'}</span>
             </FloatingButton>
             <HomeHeader>
                 {topPosts && topPosts.title &&
