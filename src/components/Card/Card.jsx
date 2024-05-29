@@ -109,7 +109,7 @@ async function handleDeleteComment(comment) {
 };
 
 return (
-    <div tabIndex={0} ref={cardRef}aria-label={`Título: ${title}. Texto: ${text}. Curtidas: ${likeCount}... Comentários: ${comments?.length}.`}>
+    <div ref={cardRef}aria-label={`Título: ${title}. Texto: ${text}. Curtidas: ${likeCount}... Comentários: ${comments?.length}.`}>
     <CardContainer>
         <CardBody >
             <div className="content">
