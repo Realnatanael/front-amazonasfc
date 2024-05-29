@@ -15,9 +15,12 @@ export default function Home() {
     const [topPosts, setTopPosts] = useState(null);
     const userId = Cookies.get('userId');
     const loginButtonRef = useContext(ButtonRefContext);
+    const [isNarrationActive, setIsNarrationActive] = useState(false);
     const speak = (text) => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        speechSynthesis.speak(utterance);
+        if (isNarrationActive) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
     };
 
     useHotkeys('ArrowDown', () => postRef.current.focus())
@@ -30,6 +33,11 @@ export default function Home() {
         const topPostResponse = await getTopPosts();
         setTopPosts(topPostResponse.data.news);
     }
+
+    useEffect(() => {
+        const narrationState = localStorage.getItem('narrationActive');
+        setIsNarrationActive(narrationState === 'true');
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -53,7 +61,14 @@ export default function Home() {
 
     return (
         <>
-            <FloatingButton onMouseEnter={() => speak('Ativar modo leitura de tela?')}>
+            <FloatingButton
+                onMouseEnter={() => speak('Ativar modo leitura de tela?')}
+                onClick={() => {
+                    const newNarrationState = !isNarrationActive;
+                    setIsNarrationActive(newNarrationState);
+                    localStorage.setItem('narrationActive', newNarrationState.toString());
+                }}
+            >
                 <MdAccessibilityNew />
                 <span className="tooltip-text">Ativar modo leitura de tela?</span>
             </FloatingButton>
@@ -70,6 +85,8 @@ export default function Home() {
                         likes={topPosts.likes}
                         comments={topPosts.comments}
                         username={topPosts.username}
+                        onMouseEnter={() => isNarrationActive && speak(topPosts.title)}
+                        speak={speak}
                     />
                 }
             </HomeHeader>
@@ -86,6 +103,8 @@ export default function Home() {
                         likes={item.likes}
                         comments={item.comments}
                         username={item.username}
+                        onMouseEnter={() => isNarrationActive && speak(item.title)}
+                        speak={speak}
                     />
                 })}
             </HomeBody>

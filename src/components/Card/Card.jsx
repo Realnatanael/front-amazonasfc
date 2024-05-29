@@ -16,7 +16,7 @@ function getRandomColor() {
     return color;
 }
 
-export function Card({top, title, text, banner, likes, comments: initialComments, actions=false, id, username}){
+export function Card({top, title, text, banner, likes, comments: initialComments, actions=false, id, username, onMouseEnter, speak}){
 
     const [likeCount, setLikeCount] = useState(likes?.length || 0);
     const [liked, setLiked] = useState(false);
@@ -109,25 +109,30 @@ async function handleDeleteComment(comment) {
 };
 
 return (
-    <div ref={cardRef}aria-label={`Título: ${title}. Texto: ${text}. Curtidas: ${likeCount}... Comentários: ${comments?.length}.`}>
-    <CardContainer>
-        <CardBody >
-            <div className="content">
-                <CardHeader top={top}>
-                    {actions && (
-                        <span>
-                            <Link aria-label="Editar" to={`/manage-news/edit/${id}`}>
+    <div ref={cardRef} aria-label={`Título: ${title}. Texto: ${text}. Curtidas: ${likeCount}... Comentários: ${comments?.length}.`}>
+        <CardContainer>
+            <CardBody >
+                <div className="content">
+                    <CardHeader top={top}>
+                        {actions && (
+                            <span>
+                                <Link aria-label="Editar" to={`/manage-news/edit/${id}`}>
                                     <i className="bi bi-pencil-square"></i>
-                            </Link>
-                            <Link aria-label="Deletar" to={`/manage-news/delete/${id}`}>
-                                <i className="bi bi-trash3"></i>
-                            </Link>
-                        </span>
-                    )}
-                    <h2>{title}</h2>
-                    <TextLimit text= {text} limit={280}/>
-                </CardHeader>
-                
+                                </Link>
+                                <Link aria-label="Deletar" to={`/manage-news/delete/${id}`}>
+                                    <i className="bi bi-trash3"></i>
+                                </Link>
+                            </span>
+                        )}
+                        <h2 
+                            onMouseEnter={onMouseEnter} 
+                            onMouseLeave={() => window.speechSynthesis.cancel()}
+                        >
+                            {title}
+                        </h2>
+                        <TextLimit text={text} limit={280} speak={speak} />
+                    </CardHeader>
+        
                 <CardFooter>
                     <section tabIndex={0} aria-label="Curtir" >
                         <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
