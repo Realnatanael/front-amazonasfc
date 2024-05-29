@@ -43,7 +43,7 @@ export function Profile(){
         <ProfileContainer>
             <ProfileHeader>
                 <ProfileIconEdit>
-                    {userId && <Link to={`/edit-profile/${userId}`}>
+                    {userId && <Link aria-label="Editar" to={`/edit-profile/${userId}`}>
                         <i className="bi bi-pencil-square"></i>
                     </Link>}
                 </ProfileIconEdit>
@@ -54,7 +54,7 @@ export function Profile(){
                         <p>{user.username}</p>
                 </ProfileUser>
                 <ProfileActions>
-                    <Link to="/manage-news/add/news">
+                    <Link aria-label="Adicionar Notícia" to="/manage-news/add/news">
                         <ProfileIconAdd>
                             <i className="bi bi-plus-circle"></i>
                         </ProfileIconAdd>

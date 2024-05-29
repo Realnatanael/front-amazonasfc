@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
-import logo from '../../images/AmazonasFansLogo.png'
+import logo from '../../images/Logo2.png'
 import logo2 from "../../images/amazonas-futebol-clube-seeklogo.png"
 import {ImageLogo, Nav, InputSpace, ErrorSpan, UserLoggerSpace, Container } from  "../Navbar/NavbarStyled"
 import { useForm } from 'react-hook-form';
@@ -91,11 +91,11 @@ export function Navbar(){
                 </Link>
 
                 {user ? (
-                    <UserLoggerSpace >
-                        <Link to="/profile">
+                    <UserLoggerSpace aria-label='Entrar Perfil' >
+                        <Link  to="/profile">
                         <h2>{user.name}</h2>
                         </Link>
-                        <i className='bi bi-box-arrow-right' onClick={signout}></i>
+                        <i aria-label="deslogar" className='bi bi-box-arrow-right' onClick={signout}></i>
                     </UserLoggerSpace>
                 ): (
                     <ButtonRefContext.Provider value={loginButtonRef} >

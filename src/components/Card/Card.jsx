@@ -116,10 +116,10 @@ return (
                 <CardHeader top={top}>
                     {actions && (
                         <span>
-                            <Link to={`/manage-news/edit/${id}`}>
+                            <Link aria-label="Editar" to={`/manage-news/edit/${id}`}>
                                     <i className="bi bi-pencil-square"></i>
                             </Link>
-                            <Link to={`/manage-news/delete/${id}`}>
+                            <Link aria-label="Deletar" to={`/manage-news/delete/${id}`}>
                                 <i className="bi bi-trash3"></i>
                             </Link>
                         </span>

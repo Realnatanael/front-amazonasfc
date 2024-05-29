@@ -48,7 +48,7 @@ export function Authentication(){
 
     return <AuthContainer>
         <Section type="signin">
-            <h2>Entrar</h2>
+            <h2 tabIndex="-1">Entrar</h2>
             <form onSubmit={handleSubmitSignin(inHanleSubmit)}>
                 <Input type="email" placeholder="E-mail" name="email" register={registerSignin}/>
                 {errorsSignin.email && (<ErrorSpan>{errorsSignin.email.message}</ErrorSpan>)}
@@ -57,7 +57,7 @@ export function Authentication(){
                 <Button type="submit" text="Entrar"/>
             </form>
             <p>Ou</p>
-                <Link to="/signup">
+                <Link tabIndex={-1} to="/signup">
                     <Button  type="button" text="Cadastre-se">Cadastre-se</Button>
                 </Link>
         </Section> 

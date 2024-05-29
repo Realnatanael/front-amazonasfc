@@ -58,16 +58,16 @@ export function Registration (){
         <Section type="signup"> 
                 <h2>Cadastre-se</h2>
                 <form onSubmit={handleSubmitSignup(upHanleSubmit)}>
-                <Input type="text" placeholder="Nome" name="name" register={registerSignup}/>
+                <Input aria-label="nome" type="text" placeholder="Nome" name="name" register={registerSignup}/>
                 {errorsSignup.name && (<ErrorSpan>{errorsSignup.name.message}</ErrorSpan>)}
-                <Input type="email" placeholder="E-mail" name="email" register={registerSignup} />
+                <Input aria-label="E-mail" type="email" placeholder="E-mail" name="email" register={registerSignup} />
                 {errorsSignup.email && (<ErrorSpan>{errorsSignup.email.message}</ErrorSpan>)}
-                <Input type="password" placeholder="Senha" name="password" register={registerSignup} />
+                <Input aria-label="senha" type="password" placeholder="Senha" name="password" register={registerSignup} />
                 {errorsSignup.password && (<ErrorSpan>{errorsSignup.password.message}</ErrorSpan>)}
-                <Input type="password" placeholder="Confirme a senha" name="confirmPassword" register={registerSignup}/>
+                <Input aria-label="Confirma senha" type="password" placeholder="Confirme a senha" name="confirmPassword" register={registerSignup}/>
                 {errorsSignup.confirmPassword && (<ErrorSpan>{errorsSignup.confirmPassword.message}</ErrorSpan>)}
                 {isSignupSuccessful && <SuccessSpan>Cadastro realizado com sucesso!</SuccessSpan>}
-                <Button type="submit" text="Cadastrar"/>
+                <Button aria-label="cadastrar" type="submit" text="Cadastrar"/>
                 </form>
             </Section>
     </AuthContainer>
