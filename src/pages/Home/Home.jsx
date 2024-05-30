@@ -3,12 +3,9 @@ import { Card } from "../../components/Card/Card";
 import { getAllPosts, getTopPosts } from "../../services/postsServices";
 import { FloatingButton, HomeBody, HomeHeader, ScreenReaderMessage } from "./HomeStyled";
 import Cookies from 'js-cookie';
-import { ButtonRefContext } from "../../components/context/ButtonRefContext";
 import { MdAccessibilityNew } from "react-icons/md";
 
 export default function Home() {
-
-    const loginRef = useRef();
     const [posts, setPosts] = useState([]);
     const [topPosts, setTopPosts] = useState(null);
     const userId = Cookies.get('userId');

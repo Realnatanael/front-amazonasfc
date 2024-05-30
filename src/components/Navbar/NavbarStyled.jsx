@@ -134,9 +134,7 @@ export const UserLoggerSpace = styled.div`
         font-size: 1rem;
         transition: all 0.5s;
         cursor: pointer;
-    }
 
-    h2{
         &:hover{
             color: #ffcf4d; 
             text-shadow: 0px 0px 30px #ffcf4d;

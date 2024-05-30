@@ -73,6 +73,10 @@ export const CardHeader = styled.article`
         margin-bottom: 1rem;
         font-size: ${props => props.top ? "3rem" : "1.5rem"};
         width: 100%;
+
+        @media (max-width: 420px) {
+            font-size: 1.5rem;
+        }
     }
 
     span{

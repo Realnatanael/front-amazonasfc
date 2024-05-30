@@ -47,11 +47,11 @@ export function Profile(){
                         <i className="bi bi-pencil-square"></i>
                     </Link>}
                 </ProfileIconEdit>
-                <ProfileBackground src={user.background} alt=""/>
+                <ProfileBackground src={user?.background} alt=""/>
                 <ProfileUser>
-                    <ProfileAvatar src={user.avatar} alt="Foto de usuário"/>
-                        <h2>{user.name}</h2>
-                        <p>{user.username}</p>
+                    <ProfileAvatar src={user?.avatar} alt="Foto de usuário"/>
+                        <h2>{user?.name}</h2>
+                        <p>{user?.username}</p>
                 </ProfileUser>
                 <ProfileActions>
                     <Link aria-label="Adicionar Notícia" to="/manage-news/add/news">

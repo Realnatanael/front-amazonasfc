@@ -6,10 +6,28 @@ export const HomeBody = styled.section`
     grid-gap: 10px;
     margin: 1rem auto;
     width: 80%;
+
+    @media (max-width: 420px){
+        grid-template-columns: 1fr; // 1 coluna
+    
+    }
 `
 export const HomeHeader = styled.header`
     width: 80%;
     margin: 1rem auto;
+
+    h2 {
+        @media (max-width: 420px){
+            font-size: 1.5rem;
+        }
+    }
+    p {
+        word-wrap: break-word;
+
+        @media (max-width: 420px){
+            font-size: 1.2rem;
+        }
+    }
 `
 export const ScreenReaderMessage = styled.div`
     position: absolute;
@@ -39,7 +57,7 @@ export const FloatingButton = styled.button`
         cursor: pointer;
     }
 
-    // Responsividade para telas menores, deixando o componente no ldo direito e menor
+    // Responsividade para telas menores, deixando o componente no lado direito e menor
     @media (max-width: 420px) {
         bottom: 10px;
         left: auto;

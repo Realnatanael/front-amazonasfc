@@ -99,6 +99,12 @@ export const ProfilePosts = styled.div`
     a{
         text-decoration: none;
     }
+
+    h2 {
+        @media (max-width: 420px){
+            font-size: 1.5rem;
+        }
+    }
     h3{
         grid-column: 1 / -1;
         text-align: center;
@@ -106,5 +112,9 @@ export const ProfilePosts = styled.div`
         color: #fcba30;
         font-weight: bold;
         margin-top: 1rem;
+    }
+
+    @media (max-width: 420px){
+        grid-template-columns: 1fr;
     }
 `
