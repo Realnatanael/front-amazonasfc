@@ -134,21 +134,22 @@ export function Card({ top, title, text, banner, likes, comments: initialComment
                         </CardHeader>
 
                         <CardFooter>
-                            <section tabIndex={0} aria-label="Curtir" >
+                            <section 
+                                tabIndex={0} aria-label="Curtir"
+                                onMouseEnter={() => speak(`Curtidas: ${likeCount}`)}
+                                onMouseLeave={() => window.speechSynthesis.cancel()}
+                             >
                                 <i className={liked ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike}></i>
-                                <span
-                                    onMouseEnter={() => speak(`Curtidas: ${likeCount}`)}
-                                    onMouseLeave={() => window.speechSynthesis.cancel()}
-                                >
+                                <span>
                                     {likeCount}
                                 </span>
                             </section>
-                            <section tabIndex={0} aria-label="Comentário">
+                            <section tabIndex={0} aria-label="Comentário"
+                                onMouseEnter={() => speak(`Comentários: ${comments?.length}`)}
+                                onMouseLeave={() => window.speechSynthesis.cancel()}
+                            >
                                 <i className="bi bi-chat" onClick={toggleCommentForm}></i>
-                                <span
-                                    onMouseEnter={() => speak(`Comentários: ${comments?.length}`)}
-                                    onMouseLeave={() => window.speechSynthesis.cancel()}
-                                >{comments?.length}</span>
+                                <span>{comments?.length}</span>
                             </section>
                             <section>
                                 <span
