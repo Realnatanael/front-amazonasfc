@@ -70,6 +70,7 @@ export function Navbar(){
         Cookies.remove('token');
         setUser(null);
         navigate('/');
+        window.location.reload();
     }
 
     useEffect(() => {
@@ -102,13 +103,18 @@ export function Navbar(){
 
                 {user ? (
                     <UserLoggerSpace 
-                    aria-label='Entrar Perfil' 
-                    onMouseEnter={() => isNarrationActive && speak(user.name)}
-                >
-                    <Link  to="/profile">
+                    aria-label='Entrar Perfil'>
+                    <Link 
+                    onMouseEnter={() => isNarrationActive && speak(`Olá ${user.name.split(' ')[0]}, clique para acessar seu perfil e ver suas infomações e suas postagens`)}
+                    onMouseLeave={() => window.speechSynthesis.cancel()}
+                     to="/profile">
                     <h2>{user.name}</h2>
                     </Link>
-                    <i aria-label="deslogar" className='bi bi-box-arrow-right' onClick={signout}></i>
+                    <i aria-label="deslogar" className='bi bi-box-arrow-right' onClick={signout}
+                    onMouseEnter={() => isNarrationActive && speak('Clique para deslogar')}
+                    
+
+                    ></i>
                 </UserLoggerSpace>
                 ): (
                     <ButtonRefContext.Provider value={loginButtonRef}>

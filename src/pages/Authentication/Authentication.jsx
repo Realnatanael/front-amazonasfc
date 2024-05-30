@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { baseURL } from '../../services/userServices';
+import { useCallback, useState } from "react";
 
 export function Authentication(){
     const navigate = useNavigate();
@@ -19,6 +20,15 @@ export function Authentication(){
         handleSubmit: handleSubmitSignin, 
         formState: {errors: errorsSignin}, 
     } = useForm({resolver: zodResolver(signinSchema)});
+    const narrationState = localStorage.getItem('narrationActive');
+    const [isNarrationActive, setIsNarrationActive] = useState(narrationState === 'true');
+
+    const speak = useCallback((text, alwaysSpeak = false) => {
+        if (alwaysSpeak || isNarrationActive) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
+    }, [isNarrationActive]);
 
     async function inHanleSubmit(data){
         try {
@@ -48,16 +58,29 @@ export function Authentication(){
 
     return <AuthContainer>
         <Section type="signin">
-            <h2 tabIndex="-1">Entrar</h2>
-            <form onSubmit={handleSubmitSignin(inHanleSubmit)}>
-                <Input type="email" placeholder="E-mail" name="email" register={registerSignin}/>
+            <h2 tabIndex="-1"
+                onMouseEnter={() => isNarrationActive && speak('Entre se você já tem uma conta')}
+                onMouseLeave={() => window.speechSynthesis.cancel()}
+            >Entrar</h2>
+            <form onSubmit={handleSubmitSignin(inHanleSubmit)}
+                 onMouseEnter={() => isNarrationActive && speak('Digite seu e-mail e senha e depois clique para entrar')}
+                 onMouseLeave={() => window.speechSynthesis.cancel()}
+            >
+                <Input type="email" placeholder="E-mail" name="email" register={registerSignin}
+                    onMouseClick={() => isNarrationActive && speak('Digite seu e-mail')}
+                />
                 {errorsSignin.email && (<ErrorSpan>{errorsSignin.email.message}</ErrorSpan>)}
                 <Input type="password" placeholder="Senha" name="password" register={registerSignin}/>
                 {errorsSignin.password && (<ErrorSpan>{errorsSignin.password.message}</ErrorSpan>)}
-                <Button type="submit" text="Entrar"/>
+                <Button type="submit" text="Entrar"
+                    onMouseEnter={() => isNarrationActive && speak('Clique para entrar')}
+                />
             </form>
             <p>Ou</p>
-                <Link tabIndex={-1} to="/signup">
+                <Link tabIndex={-1} to="/signup"
+                    onMouseEnter={() => isNarrationActive && speak('Se não tem conta, clica aqui pra se cadastrar')}
+                    onMouseLeave={() => window.speechSynthesis.cancel()}
+                >
                     <Button  type="button" text="Cadastre-se">Cadastre-se</Button>
                 </Link>
         </Section> 
