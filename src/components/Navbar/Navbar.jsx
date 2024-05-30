@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../Button/Button';
 import { searchSchema } from '../../Schemas/SearchSchema';
 import Cookies from 'js-cookie';
-import { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { userLogged } from '../../services/userServices';
 import { UserContext } from '../../Context/UserContext';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -19,6 +19,16 @@ export function Navbar(){
     const [logoSrc, setLogoSrc] = useState(logo);
     const loginButtonRef = useContext(ButtonRefContext);
     const location = useLocation();
+    const narrationState = localStorage.getItem('narrationActive');
+    const [isNarrationActive, setIsNarrationActive] = useState(narrationState === 'true');
+
+    const speak = useCallback((text, alwaysSpeak = false) => {
+        if (alwaysSpeak || isNarrationActive) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
+    }, [isNarrationActive]);
+
 
     useHotkeys('ArrowLeft', () => loginButtonRef.current.focus());
     useEffect(() => {
@@ -91,22 +101,33 @@ export function Navbar(){
                 </Link>
 
                 {user ? (
-                    <UserLoggerSpace aria-label='Entrar Perfil' >
-                        <Link  to="/profile">
-                        <h2>{user.name}</h2>
-                        </Link>
-                        <i aria-label="deslogar" className='bi bi-box-arrow-right' onClick={signout}></i>
-                    </UserLoggerSpace>
+                    <UserLoggerSpace 
+                    aria-label='Entrar Perfil' 
+                    onMouseEnter={() => isNarrationActive && speak(user.name)}
+                >
+                    <Link  to="/profile">
+                    <h2>{user.name}</h2>
+                    </Link>
+                    <i aria-label="deslogar" className='bi bi-box-arrow-right' onClick={signout}></i>
+                </UserLoggerSpace>
                 ): (
-                    <ButtonRefContext.Provider value={loginButtonRef} >
-                    <Link to="/auth" tabIndex={-1}>
-                        <ScreenReaderMessage >
+                    <ButtonRefContext.Provider value={loginButtonRef}>
+                    <Link to="/auth" tabIndex={-1} onMouseEnter={() => isNarrationActive && speak('Entrar ou cadastrar-se como participante')}>
+                        <ScreenReaderMessage onMouseOver={() => isNarrationActive && speak('Clique enter se quiser entrar como usuário')}>
                             Clique enter se quiser entrar como usuário
                         </ScreenReaderMessage>
-                        <Button  type="button" text="Entrar" tabindex="0"   role="button">Entrar</Button>
+                        <Button  
+                            type="button" 
+                            text="Entrar" 
+                            tabindex="0" 
+                            role="button" 
+                        >
+                            Entrar
+                        </Button>
                     </Link>
                     </ButtonRefContext.Provider>
                 )}
+                
                 </Container>
                 
             </Nav>

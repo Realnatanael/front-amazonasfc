@@ -3,18 +3,15 @@ import { Card } from "../../components/Card/Card";
 import { getAllPosts, getTopPosts } from "../../services/postsServices";
 import { FloatingButton, HomeBody, HomeHeader, ScreenReaderMessage } from "./HomeStyled";
 import Cookies from 'js-cookie';
-import { useHotkeys } from "react-hotkeys-hook";
 import { ButtonRefContext } from "../../components/context/ButtonRefContext";
 import { MdAccessibilityNew } from "react-icons/md";
 
 export default function Home() {
 
     const loginRef = useRef();
-    const postRef = useRef();
     const [posts, setPosts] = useState([]);
     const [topPosts, setTopPosts] = useState(null);
     const userId = Cookies.get('userId');
-    const loginButtonRef = useContext(ButtonRefContext);
     const [isNarrationActive, setIsNarrationActive] = useState(false);
     const speak = (text, alwaysSpeak = false) => {
         if (alwaysSpeak || isNarrationActive) {
@@ -22,9 +19,6 @@ export default function Home() {
             speechSynthesis.speak(utterance);
         }
     };
-
-    useHotkeys('ArrowDown', () => postRef.current.focus())
-    useHotkeys('ArrowLeft', () => loginButtonRef.current.focus())
 
     async function findPost() {
         const postsResponse = await getAllPosts();
@@ -39,21 +33,6 @@ export default function Home() {
         setIsNarrationActive(narrationState === 'true');
     }, []);
 
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            switch (event.key) {
-                case 'ArrowLeft':
-                    loginRef.current.focus();
-                    break;
-                case 'ArrowDown':
-                    postsRef.current.focus();
-                    break;
-                default:
-                    break;
-            }
-        };
-    }
-        , []);
 
     useEffect(() => {
         findPost();
@@ -67,6 +46,7 @@ export default function Home() {
                     const newNarrationState = !isNarrationActive;
                     setIsNarrationActive(newNarrationState);
                     localStorage.setItem('narrationActive', newNarrationState.toString());
+                    window.location.reload();           
                 }}
             >
                 <MdAccessibilityNew />
